@@ -4,9 +4,9 @@ public class AMEducationTrainingController {
      public Contact contact {get; set;}
 
     //public List<Contact > contactList {get; set;}
-    //public String  contactName{Get; Set;} 
+    //public String  contactName{Get; Set;}
     //參訓人員
-    public List<participant> participants {get; set;} 
+    public List<participant> participants {get; set;}
 
     public AMEducationTrainingController(ApexPages.StandardController con) {
 
@@ -32,24 +32,24 @@ public class AMEducationTrainingController {
 
         for (participant p : participants) {
             System.debug(p);
-            List<Contact> cl = [SELECT id, name FROM Contact WHERE name = :p.name];
+            List<Contact> cl = [SELECT id, name FROM Contact WHERE number__c = :p.empid];
             System.debug(cl);
             System.debug(cl.get(0).id);
             Event ev = new Event
             (
                 whoId = cl.get(0).id,
                 StartDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
-                EndDateTime = Datetime.valueOf(am.EducationTrainingTime__c).addDays(2),//看這裡~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                EndDateTime = Datetime.valueOf(am.EducationTrainingTime__c).addHours(Integer.valueOf(am.EducationTrainingHours__c)),//看這裡~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ActivityDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
                 Subject = SapApprovalEnum.EDUCATIONTRAININGREQUEST + ' Event',
-                Description =  'test'
+                Description =  'It s EDUCATIONTRAININGREQUEST'
             );
             insert ev;
 
         }
 
 
-        //Upsert am;
+        Upsert am;
         System.debug('In save extention ');
         return new PageReference('/' + am.Id);
 
@@ -83,8 +83,16 @@ public class AMEducationTrainingController {
         String inputType = Apexpages.currentPage().getParameters().get('inputType');
         String inputValue  = Apexpages.currentPage().getParameters().get('inputValue');
         Integer rowId = integer.valueof(Apexpages.currentPage().getParameters().get('rowId')) - 1;
-        if (inputType.equals('empid')){
+        if (inputType.equals('empid') && !String.isBlank(inputValue)){
             participants.get(rowId).empid = inputValue;
+            List<Contact> cont = [SELECT Name FROM CONTACT WHERE number__c=:inputValue];
+            if(cont.size() < 1 ){
+               participants.get(rowId).name = '查無此人';
+
+            }else{
+                participants.get(rowId).name = cont.get(0).name;
+            }
+            
         }else{
             participants.get(rowId).name = inputValue;
         }   

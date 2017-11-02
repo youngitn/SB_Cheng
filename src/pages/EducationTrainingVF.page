@@ -64,52 +64,10 @@
         //j$("input[id$='nameValue']").val(val);
     }
 
-    function openlookup(id){
-      // var originalbaseURL = baseURL;
-      // var originalwidth = width;
-      // var originalmodified = modified;
-      // var originalsearchParam = searchParam;
-      var searchParam = '';
-    //alert(baseURL);
-    var baseURL='';
-    var lookupType = '';
-    
-    var isCustomLookup = false;
-    lookupType = '001';
-    // Following "001" is the lookup type for Account object so change this as per your standard or custom object
-    if(lookupType == "001"){
-
-      var urlArr = baseURL.split("&");
-      var txtId = '';
-      if(urlArr.length > 2) {
-        urlArr = urlArr[1].split('=');
-        txtId = urlArr[1];
-      }
-      //https://kinglai--cheng--c.cs6.visual.force.com/apex/CustomAccountLookup?txt=j_id0:edform:j_id31:InternalTraining:participants:j_id59:0:participant_1&frm=&lksearch=&lksrch=
-      // Following is the url of Custom Lookup page. You need to change that accordingly
-      baseURL = "/apex/CustomAccountLookup?txt=" + escapeUTF('j_id0:edform:j_id31:InternalTraining:participants:j_id59:0:'+id);
-
-      // Following is the id of apex:form control "myForm". You need to change that accordingly
-      baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.edform}");
-     
-        baseURL = baseURL + "&lksearch=" + searchParam;
-      
-
-      // Following is the ID of inputField that is the lookup to be customized as custom lookup
-      //if(txtId.indexOf('Account') > -1 ){
-        isCustomLookup = true;
-      //}
+    function onCompleteJSFunc(){
+        //alert('OK');
+        j$('#participantsTable').find('input[name^="j_id0"]');
     }
-
-
-    if(isCustomLookup == true){
-      openPopup(baseURL, "lookup", 350, 480, "width=500,height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
-    }
-    // else {
-    //   if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
-    //   openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
-    // } 
-  }
             </script>
         </head>
         <body>
@@ -211,13 +169,13 @@
                         </apex:inputfield>
                         <!-- 如果教育訓練類別 = 內訓 顯示參訓人員 -->
                         <apex:pageblocksection id="participants" title="參訓人員">
-                            <apex:commandbutton action="{!addBook}" rerender="output1" status="retrieveStatus" value="新增">
+                            <apex:commandbutton action="{!addBook}" oncomplete="onCompleteJSFunc();" rerender="output1" status="retrieveStatus" value="新增">
                             </apex:commandbutton>
                             <br/>
                             <apex:outputpanel id="output1" layout="block" styleclass="scroll">
                                 <apex:actionstatus id="retrieveStatus" starttext="(waiting...)">
                                 </apex:actionstatus>
-                                <table border="0" cellpadding="0" cellspacing="0" class="list">
+                                <table border="0" cellpadding="0" cellspacing="0" class="list" id="participantsTable">
                                     <thead>
                                         <th>
                                         </th>
@@ -225,11 +183,12 @@
                                             行号
                                         </th>
                                         <th>
-                                            姓名
+                                            工號
                                         </th>
                                         <th>
-                                            contactId
+                                            姓名
                                         </th>
+                                        
                                     </thead>
                                     <tbody>
                                         <!-- 定義 actionfunction 和其參數 param -->
@@ -260,14 +219,12 @@
                                                     {!listIndex}
                                                 </td>
                                                 <td>
-                                                    <input id="participant_{!listIndex}" onchange="putValueInJavascript(this.value,{!listIndex},'name')" style="width: 90%;" styleclass="text" type="text" value="{!item.name}"/>
-                                                    <a onclick="openlookup('participant_{!listIndex}')">
-                                                        lookup
-                                                    </a>
-                                                </td>
-                                                <td>
                                                     <input onchange="putValueInJavascript(this.value,{!listIndex},'empid')" style="width: 90%;" styleclass="text" type="text" value="{!item.empid}"/>
                                                 </td>
+                                                <td>
+                                                    <input id="participant_{!listIndex}" onchange="putValueInJavascript(this.value,{!listIndex},'name')" style="width: 90%;" styleclass="text" type="text"  value="{!item.name}" readonly="readonly"/>
+                                                </td>
+                                                
                                             </tr>
                                             <apex:variable value="{!listIndex+1}" var="listIndex">
                                             </apex:variable>
