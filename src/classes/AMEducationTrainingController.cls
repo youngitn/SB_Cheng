@@ -6,7 +6,7 @@ public class AMEducationTrainingController {
     //public List<Contact > contactList {get; set;}
     //public String  contactName{Get; Set;} 
     //參訓人員
-    public List<participant> participants {get; set;}
+    public List<participant> participants {get; set;} 
 
     public AMEducationTrainingController(ApexPages.StandardController con) {
 
