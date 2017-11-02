@@ -1,0 +1,18 @@
+<apex:page extensions="ApexParam1Controller" recordsetvar="accountst" standardcontroller="contact">
+    <apex:form >
+        <apex:repeat value="{!accountst}" var="a">
+            <apex:inputcheckbox >
+                <apex:actionsupport action="{!doActionSupport}" event="onchange" rerender="selectedResultPanel">
+                    <apex:param name="ddddd" assignto="{!vfParam}" value="{!a.Id}">
+                    </apex:param>
+                </apex:actionsupport>
+             </apex:inputcheckbox>
+            {!a.Name}
+            <br/>
+        </apex:repeat>
+        <apex:outputpanel id="selectedResultPanel">
+            Selected objId!! : {!vfParam}
+        </apex:outputpanel>
+    </apex:form>
+    
+</apex:page>

@@ -1,0 +1,13 @@
+<apex:page controller="ApexParamController">
+    <apex:form >
+        <a href="javascript:ccActionFunction('TestValue');">Send Param To Apex</a> <br />
+        
+        <apex:outputPanel id="vfParamPanel">
+            The value of parameter is : {!vfParam}
+        </apex:outputPanel>
+        
+        <apex:actionFunction name="ccActionFunction" action="{!doActionFunction}" reRender="vfParamPanel">
+            <apex:param name="vfParam1232" value="" assignTo="{!vfParam}" />
+        </apex:actionFunction>
+    </apex:form>
+</apex:page>

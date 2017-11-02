@@ -1,0 +1,5 @@
+<apex:page standardController="Account" extensions="AddFieldsController">
+ 
+   <apex:outputField value="{!Account.name}" /> 
+	<apex:outputField value="{!Account.BillingCity}" /> 
+</apex:page>

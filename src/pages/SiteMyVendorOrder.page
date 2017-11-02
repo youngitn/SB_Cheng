@@ -1,0 +1,20 @@
+<apex:page showHeader="false">
+<apex:includeScript value="{!URLFOR($Resource.angularjs,'')}" />
+<head>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+  <style>
+    div.slds-col{
+        margin:15px;
+    }
+    .warning{
+        color:red;
+    }
+    .normal{
+        color:green;
+    }
+
+  </style>
+</head>
+<body>正在建设中.......</body>
+
+</apex:page>

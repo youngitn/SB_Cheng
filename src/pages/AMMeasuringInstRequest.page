@@ -1,0 +1,102 @@
+<apex:page standardController="Approval_Managed__c" extensions="AMMeasuringInstRequestExtension" >
+<!-- 计量器具请购详细信息 -->
+<html>
+<body>
+<apex:sectionHeader title="计量器具请购申请流程" subtitle="新建/计量器具请购申请流程"></apex:sectionHeader>
+    <apex:pageMessages escape="true"></apex:pageMessages>
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="保存"/>
+                <apex:commandButton action="{!cancel}" value="取消"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="标准审批编辑" collapsible="false">
+                <!-- 申请人(工号) -->
+                <apex:outputField value="{!am.Applicant_Code__c}"></apex:outputField>
+                <!-- 流程名称 -->
+                <apex:outputField value="{!am.Approval_Name__c}"></apex:outputField>
+                <!-- 申请人(姓名) -->
+                <apex:outputField value="{!am.Applicant_Name__c}"></apex:outputField>
+                <!-- 申请人部门 -->
+                <apex:outputField value="{!am.Dept_Name__c}"></apex:outputField>
+                <!-- 申请人公司代码 -->
+                <apex:outputField value="{!am.Dept_Name__c}"></apex:outputField>
+                <!-- 单据日期-->
+                <apex:outputField value="{!am.Bill_Date__c}"></apex:outputField>
+                <!-- 审核状态 -->
+                <apex:outputField value="{!am.Approval_Status__c}"></apex:outputField>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="计量器具请购详细信息" collapsible="false">
+                <!-- 工厂 -->
+                <apex:inputField id="factory" value="{!am.Factory__c}" required="true"  ></apex:inputField>
+                <!-- 成本中心 -->
+                <apex:inputField id="Dept_of_CostCenter" value="{!am.Dept_of_CostCenter__c}" required="true"></apex:inputField>
+                <!-- 资产类型 -->
+                <apex:inputField id="Asset_Type" value="{!am.Asset_Type__c}" required="true"></apex:inputField>
+                <!-- 工作中心 
+                <apex:inputField value="{!am.Work_Center__c}"></apex:inputField>-->
+                <!-- 计量器具名称 -->
+                <apex:inputField value="{!am.Gage_Name__c}" required="true"></apex:inputField>
+                <!-- 负责成本中心 
+                <apex:inputField id="Responsible_CostCenter" value="{!am.Responsible_CostCenter__c}"></apex:inputField>-->
+                <!-- 型号规格 -->
+                <apex:inputField value="{!am.Model_and_Spec__c}" required="true"></apex:inputField>
+                <!-- 指定保管人 
+                <apex:inputField value="{!am.Keeper_Reserved__c}" required="true"></apex:inputField>-->
+                <!-- 需求日期 -->
+                <apex:inputField value="{!am.Required_date__c }" required="true"></apex:inputField>
+                <!-- 预算金额 -->
+                <apex:inputField value="{!am.Amount_of_Budget__c}"></apex:inputField>
+                <!-- 预算币种 -->
+                <apex:inputField id="Currcency_Budget" value="{!am.Currcency_Budget__c}"></apex:inputField>
+
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="其他原因" >
+            <!-- 其他原因 -->
+                <apex:inputField value="{!am.Reason_of_Description__c}" style="width: 175%;height: 120%"></apex:inputField>
+            </apex:pageBlockSection>
+
+            <!--<apex:pageBlockSection title="相关人员确认" >
+            <!-- 部门主管确认 
+                <apex:inputField value="{!am.Department_head_confirmation__c}" ></apex:inputField>
+
+            <!-- 刘红燕确认 
+                <apex:inputField value="{!am.liuhongyan_confirmation__c}" ></apex:inputField>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="采购议价" >
+            <!-- 采购价格 
+                <apex:inputField value="{!am.Price_Purchase__c}" ></apex:inputField>
+
+            <!-- 交货周期 
+                <apex:inputField value="{!am.Period_Delivery__c}" ></apex:inputField>
+
+            <!-- 币种 
+                <apex:inputField value="{!am.Currency__c}" ></apex:inputField>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection title="采购下单" >
+            <!-- 采购订单号 
+                <apex:inputField value="{!am.Real_Purchase__c}" ></apex:inputField>
+
+            <!-- 数量 
+                <apex:inputField value="{!am.Quantity__c}" ></apex:inputField>
+
+            <!-- 供应商（编号） 
+                <apex:inputField value="{!am.Vendor_Number__c}" ></apex:inputField>
+
+            <!-- 金额  
+                <apex:inputField value="{!am.money__c}" ></apex:inputField>
+
+            <!-- 供应商名称 
+                <apex:inputField value="{!am.Vendor_Name__c}" ></apex:inputField>
+            </apex:pageBlockSection>-->
+
+        </apex:pageBlock>
+    </apex:form>>
+</body>
+</html>
+</apex:page>

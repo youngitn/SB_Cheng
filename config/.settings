@@ -1,0 +1,18 @@
+{
+    "projectName": "SB_Cheng",
+    "username": "martinlee-jfx3@force.com.cheng",
+    "id": "be4a4ee0-bde9-11e7-a38c-131d4d697fc6",
+    "namespace": "",
+    "orgType": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "instanceUrl": "https://kinglai--cheng.cs6.my.salesforce.com",
+    "workspace": "D:\\mmworkspace",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "CustomObject",
+        "StaticResource"
+    ]
+}

@@ -1,0 +1,110 @@
+<apex:page controller="EducationTrainingController" >
+    <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+    <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+    <script>
+    function getRemoteSaveBook() {
+        var bookName = document.getElementById('bookName').value;
+         var bookPrice = document.getElementById('bookPrice').value;
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.EducationTrainingController.addBook}',
+            bookName,bookPrice, 
+            function(result, event){
+                alert(result);
+            }, 
+            {escape: true}
+        );
+    }
+    function testCallControllerAjax(){
+        var callback = {onSuccess: handleSuccess, onFailure: handleFailure};
+        function handleSuccess(result) {alert('{!msg}');}
+        function handleFailure(error) {alert('error');}
+        sforce.connection.addBook("Smith", callback);
+        
+    }
+    function myJavascriptFunc()
+    {
+        alert('Entered Javascript') ;
+        CallApexMethod() ;
+    }
+    </script>
+    
+    
+    Name:<input id='bookName' type="text" />
+    <br />
+    Price__c:<input id='bookPrice' type="text" />
+    <button onclick="getRemoteSaveBook()">save</button>
+    <div id="responseErrors"></div>
+    <br />
+    <br />
+    <!-- Begin Default Content REMOVE THIS -->
+    <h1>教育訓練申請單{!s1}Hello {!$User.LastName}!</h1>
+    
+    <!-- End Default Content REMOVE THIS -->
+    <!-- Page: -->
+    
+    <apex:pageMessages />
+    <apex:form >
+        <apex:actionFunction name="CallApexMethod" action="{!myActionInController}" onComplete="alert('{!msg}') ;"/>
+        
+        <apex:pageBlock >
+            
+            <apex:pageBlockButtons >
+                
+                <apex:commandButton value="Hit Me" onclick="CallApexMethod() ;"/>
+                
+            </apex:pageBlockButtons>
+            
+        </apex:pageBlock>
+        
+        <apex:commandLink action="{!myMethod}" value="Call my method">
+            <apex:param name="paramValue" value="testing"></apex:param>
+        </apex:commandLink>
+        <div class="slds-col" style="text-align: center;margin: auto;">
+            <button class="slds-button slds-button--brand" ng-click="query()" ng-disabled="loading">{!$Label.Search}</button>
+        </div>    
+        <apex:pageBlock >
+            <apex:facet name="caption">table caption</apex:facet>
+            <apex:facet name="header">table header</apex:facet>
+            <apex:facet name="footer">table footer</apex:facet>
+            種類:
+            <apex:selectList id="chooseColor" size="1" onchange="alert('{!check} ')">
+                <apex:selectOption itemValue="in" itemLabel="內訓" />
+                <apex:selectOption itemValue="out" itemLabel="外訓" />
+            </apex:selectList>
+            <br />
+            訓練日期:
+            <input type="date" />
+            訓練時間:
+            <input type="time" />
+            課程名稱:
+            <input type="text" />
+            <br />
+            <br />
+            辦理單位:
+            <apex:pageBlock >
+                單位名稱:<input type="text" />
+                上課地址:<input type="text" size="48" />
+                <br />
+                <br />
+                講師:<input type="text" />
+                聯絡人:<input type="text" />
+                <br />
+                <br />
+                電話:<input type="tel" />
+                課程費用:<input type="number" />
+                
+            </apex:pageBlock>
+            <br />
+            <br />
+            授課講師:<input type="text" />
+            參訓人員(內訓才需填寫):<input type="text" />
+            <br />
+            <br />
+            訓練目的/內標:<textarea value="" />
+            <br />
+            <br />
+            課後評估方式:<textarea value="" />
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
