@@ -1,7 +1,7 @@
 trigger TestTrigger on Approval_Managed1__c ( before update )
 {
 
-
+	
     Map<Id, Approval_Managed1__c> rejectedStatements
         = new Map<Id, Approval_Managed1__c> {};
      System.debug('==============================IN TRG');
@@ -52,8 +52,8 @@ trigger TestTrigger on Approval_Managed1__c ( before update )
             if ((pi.Steps[0].Comments == null ||
                     pi.Steps[0].Comments.trim().length() == 0))
             {
-                rejectedStatements.get(pi.TargetObjectId).addError(
-                    'Operation Cancelled: Please provide a rejection reason!');
+                // rejectedStatements.get(pi.TargetObjectId).addError(
+                //     'Operation Cancelled: Please provide a rejection reason!');
             }
         }
     }
