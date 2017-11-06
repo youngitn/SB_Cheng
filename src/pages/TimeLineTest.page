@@ -3,44 +3,61 @@
     </apex:stylesheet>
     <apex:stylesheet value="{!URLFOR($Resource.TimegliderJS, 'timeglider_version_1.0.3/timeglider/Timeglider.css')}">
     </apex:stylesheet>
-    <apex:stylesheet value="{!URLFOR($Resource.TimegliderJS, 'timeglider_version_1.0.3/timeglider/timeglider.datepicker.css')}">
+    <apex:stylesheet value="{!URLFOR($Resource.TimegliderJS, 'timeglider_version_1.0.3/docs-style.css')}">
     </apex:stylesheet>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery-ui.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/underscore-min.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/backbone-min.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/json2.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.tmpl.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/ba-tinyPubSub.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.mousewheel.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.ui.ipad.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/globalize.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/ba-debug.min.js')}">
-    </apex:includescript>
-    <apex:includescript value="{!URLFOR($Resource.timeglider103minjs)}">
-    </apex:includescript>
 
-    <!-- html: -->
-   <div id='placement'></div>
+
+    <style type="text/css">
+        /* defining the frame for the widget */
+		#placement {
+			margin:32px;
+			height:550px;
+		}
+    </style>
+     <body>
+        <div id="placement">
+        </div>
+    </body>
+  
+
+
+	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/json2.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery-1.9.1.min.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery-ui-1.10.3.custom.min.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/underscore-min.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/backbone-min.js')}"></apex:includescript>
+   	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.mousewheel.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.ui.ipad.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.tmpl.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/ba-debug.min.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/ba-tinyPubSub.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/globalize.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_Date.js')}"></apex:includescript>
+
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_Date.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_Org.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_Timeline.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_TimelineView.js')}"></apex:includescript>
+ 	<apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/TG_Mediator.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/timeglider.timeline.widget.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/timeglider.datepicker.js')}"></apex:includescript>
+    <apex:includescript value="{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/js/jquery.jscrollpane.min.js')}"></apex:includescript>
     
-<!-- js: -->
-<script>
+    <!-- html: -->
+   
+    <!-- js: -->
+    <script type='text/javascript'>
+   var tg1 = {};
    $(document).ready(function () { 
       var tg1 = $("#placement").timeline({
          "data_source":"{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/json/js_history.json')}",
          "min_zoom":15,
-         "max_zoom":60, 
+         "max_zoom":60,
+         "image_lane_height":100, 
+         "icon_folder":"{!URLFOR($Resource.TimegliderJS,'timeglider_version_1.0.3/timeglider/icons/')}"
      });
+      tg_actor = tg1.data("timeline");
    });
-</script>
+
+    </script>
 </apex:page>
