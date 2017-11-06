@@ -29,25 +29,39 @@ public class AMEducationTrainingController {
 
     public PageReference save() { 
 
+        String ps = '';
+        Integer i = participants.size();
+        
+        if (i > 0){
+            for (participant p : participants) {
+                i--;
 
-        for (participant p : participants) {
-            System.debug(p);
-            List<Contact> cl = [SELECT id, name FROM Contact WHERE number__c = :p.empid];
-            System.debug(cl);
-            System.debug(cl.get(0).id);
-            Event ev = new Event
-            (
-                whoId = cl.get(0).id,
-                StartDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
-                EndDateTime = Datetime.valueOf(am.EducationTrainingTime__c).addHours(Integer.valueOf(am.EducationTrainingHours__c)),//看這裡~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                ActivityDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
-                Subject = SapApprovalEnum.EDUCATIONTRAININGREQUEST + ' Event',
-                Description =  'It s EDUCATIONTRAININGREQUEST'
-            );
-            insert ev;
+                System.debug(p);
+                List<Contact> cl = [SELECT id, name FROM Contact WHERE number__c = :p.empid];
+                System.debug(cl);
+                System.debug(cl.get(0).id);
+                Event ev = new Event
+                (
+                    whoId = cl.get(0).id,
+                    StartDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
+                    EndDateTime = Datetime.valueOf(am.EducationTrainingTime__c).addHours(Integer.valueOf(am.EducationTrainingHours__c)),//看這裡~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ActivityDateTime = Datetime.valueOf(am.EducationTrainingTime__c),
+                    Subject = SapApprovalEnum.EDUCATIONTRAININGREQUEST + ' Event',
+                    Description =  'It s EDUCATIONTRAININGREQUEST'
+                );
+                insert ev;
+                ps += p.name +'-'+ p.empid;
+                if (i > 0){
 
+                    ps+=',';
+                }
+
+            }
+
+            am.InternalEducationParticipants__c = ps;
         }
-
+        
+        
 
         Upsert am;
         System.debug('In save extention ');
