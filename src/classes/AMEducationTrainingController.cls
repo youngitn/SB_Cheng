@@ -27,7 +27,7 @@ public class AMEducationTrainingController {
     }
 
 
-    public PageReference save() {
+    public PageReference save() { 
 
 
         for (participant p : participants) {
