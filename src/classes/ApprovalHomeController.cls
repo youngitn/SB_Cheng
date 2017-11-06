@@ -259,7 +259,7 @@ public with sharing class ApprovalHomeController {
                 }
             }else if(selectedApprovalValue == SapApprovalEnum.EDUCATIONTRAININGREQUEST){
                 //教育訓練申請流程
-                pageName = '/apex/EducationTrainingVF';
+                pageName = '/apex/AMEducationTraining';
             }
             else{
                 //页码维护中
