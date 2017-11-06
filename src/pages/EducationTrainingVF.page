@@ -164,9 +164,6 @@
                         <!--  12、內訓講師員工編號(填空題) -->
                         <apex:inputfield id="EducationTrainingInHouseLecturerId" value="{!am.EducationTrainingInHouseLecturerId__c}">
                         </apex:inputfield>
-                        <!-- 13 內訓講師姓名(輸入員編時系統自動帶入姓名) -->
-                        <apex:inputfield id="EducationTrainingInHouseLecturerName" value="{!am.EducationTrainingInHouseLecturerName__c}">
-                        </apex:inputfield>
                         <!-- 如果教育訓練類別 = 內訓 顯示參訓人員 -->
                         <apex:pageblocksection id="participants" title="參訓人員">
                             <apex:commandbutton action="{!addBook}" oncomplete="onCompleteJSFunc();" rerender="output1" status="retrieveStatus" value="新增">
