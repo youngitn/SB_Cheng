@@ -18,16 +18,15 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
 {
     public void handle()
     {
-        
+
         // work whith Field Update name="update Per AP"
-        // 上述action 目的是要在各關卡給不同標記 
+        // 上述action 目的是要在各關卡給不同標記
         // 讓流程每過一關就會更新某個欄位 以進入update trigger
         // 如果再trigger裡面能做關卡識別 就能做一些控制了...
         // 當然下面的 pi.Steps 也能找到關卡資訊 但不太直覺 要層層剝開.
         //-------reject------->
         Map<Id, Approval_Managed1__c> rejectedStatements = new Map<Id, Approval_Managed1__c> {};
         //<-------reject-------
-        
         //获取教育訓練申請流程各节点配置
         System.debug('!!!!!inAMEducationTrainingHandler');
         Map<Decimal, Organizational__c>  mapSpecify = null;
@@ -66,6 +65,48 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
                     rejectedStatements.put(cam.Id, cam);
                 }
                 //<-------reject-------
+                //-------approve------->
+                //A='已核准'??? 所以這邊都是要丟進去update的值
+                if (cam.Approval_Status__c == 'A' )
+                {
+                    //do,when AP00 to 01
+                    if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.CurrentProcess__c == 'AP01')
+                    {
+                        //AP01.put(cam.Id, cam);
+                        System.debug('AP01!');
+                        cam.addError('AP01!');
+                    }
+                    //do,when AP01 to 02
+                    if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.CurrentProcess__c == 'AP02')
+                    {
+                        System.debug('AP02!');
+                        //AP02.put(cam.Id, cam);
+                        cam.addError('AP02!');
+                    }
+                    //do,when AP02 to 03
+                    if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.CurrentProcess__c == 'AP03')
+                    {
+                        System.debug('AP03!');
+                        //AP03.put(cam.Id, cam);
+                        cam.addError('AP03!');
+                    }
+                    //do,when AP03 to 04
+                    if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.CurrentProcess__c == 'AP04')
+                    {
+                        System.debug('AP04!');
+                        //AP04.put(cam.Id, cam);
+                        cam.addError('AP04!');
+                    }
+                    //do,when AP04 to 05
+                    if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.CurrentProcess__c == 'AP05')
+                    {
+                        System.debug('AP05!');
+                        //AP05.put(cam.Id, cam);
+                        cam.addError('AP05!');
+                    }
+                }
+
+
 
                 if (cam.RecordTypeId == rtId && cam.Is_Reset_Approvaler__c)
                 {
@@ -76,6 +117,7 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
                     setApprovalUser(mapSpecify, cam);
                     cam.Is_Reset_Approvaler__c = false;
                 }
+                //<--------approve--------
             }
             //-------reject------->
             if (!rejectedStatements.isEmpty())
@@ -110,7 +152,7 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
                             pi.Steps[0].Comments.trim().length() == 0))
                     {
                         rejectedStatements.get(pi.TargetObjectId).addError(
-                            'Operation Cancelled: Please provide a rejection reason!');
+                            '請輸入拒絕理由!');
                     }
                 }
             }
@@ -152,5 +194,5 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
 
         //其他审批人规则
         //cam.Approval_User4__c     = Utils.getByIndex(Utils.approvalSearchApprrovalerByRule(mapSpecify.get(4),null),0);
-    } 
+    }
 }
