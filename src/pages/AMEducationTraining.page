@@ -85,8 +85,8 @@
                     <apex:param assignto="{!rowID}" name="rowID" value="">
                     </apex:param>
                 </apex:actionfunction> -->
-                <apex:pageblock>
-                    <apex:pageblockbuttons>
+                <apex:pageblock >
+                    <apex:pageblockbuttons >
                         <apex:commandbutton action="{!save}" id="doSave" value="保存">
                         </apex:commandbutton>
                         <apex:commandbutton action="{!Cancel}" value="取消">
