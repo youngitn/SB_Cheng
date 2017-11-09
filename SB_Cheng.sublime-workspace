@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"try",
+				"tryc\tTry Catch"
+			],
+			[
+				"s",
+				"PUBLIC stopTest() \tvoid"
+			],
+			[
+				"REST",
+				"Is_Reset_Approvaler__c(*重新計算審批人)\tBoolean"
+			],
+			[
+				"Sap",
+				"SapApprovalEnum\tApexClass"
+			],
+			[
+				"obj",
+				"Object"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"add",
+				"addError"
+			],
+			[
 				"In",
 				"Integer\t[Standard Apex Class]"
 			],
@@ -67,7 +95,7 @@
 			"file": "src/classes/AMEducationTrainingExtension.cls",
 			"settings":
 			{
-				"buffer_size": 3844,
+				"buffer_size": 3870,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -76,25 +104,17 @@
 			"file": "src/pages/AMEducationTraining.page",
 			"settings":
 			{
-				"buffer_size": 13379,
+				"buffer_size": 13381,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/triggers/TestTrigger.trigger",
+			"file": "src/classes/AMEducationTrainingExtensionTest.cls",
 			"settings":
 			{
-				"buffer_size": 2496,
+				"buffer_size": 2745,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/triggers/HelloWorldTrigger.trigger",
-			"settings":
-			{
-				"buffer_size": 163,
 				"line_ending": "Unix"
 			}
 		},
@@ -107,14 +127,6 @@
 			}
 		},
 		{
-			"file": "/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 1207,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"contents": "trigger RequireRejectionComment on Invoice_Statement__c (before update) \n{\n\n  Map<Id, Invoice_Statement__c> rejectedStatements \n             = new Map<Id, Invoice_Statement__c>{};\n\n  for(Invoice_Statement__c inv: trigger.new)\n  {\n    /* \n      Get the old object record, and check if the approval status \n      field has been updated to rejected. If so, put it in a map \n      so we only have to use 1 SOQL query to do all checks.\n    */\n    Invoice_Statement__c oldInv = System.Trigger.oldMap.get(inv.Id);\n\n    if (oldInv.Approval_Status__c != 'Rejected' \n     && inv.Approval_Status__c == 'Rejected')\n    { \n      rejectedStatements.put(inv.Id, inv);  \n    }\n  }\n   \n  if (!rejectedStatements.isEmpty())  \n  {\n    // UPDATE 2/1/2014: Get the most recent approval process instance for the object.\n    // If there are some approvals to be reviewed for approval, then\n    // get the most recent process instance for each object.\n    List<Id> processInstanceIds = new List<Id>{};\n    \n    for (Invoice_Statement__c invs : [SELECT (SELECT ID\n                                              FROM ProcessInstances\n                                              ORDER BY CreatedDate DESC\n                                              LIMIT 1)\n                                      FROM Invoice_Statement__c\n                                      WHERE ID IN :rejectedStatements.keySet()])\n    {\n        processInstanceIds.add(invs.ProcessInstances[0].Id);\n    }\n      \n    // Now that we have the most recent process instances, we can check\n    // the most recent process steps for comments.  \n    for (ProcessInstance pi : [SELECT TargetObjectId,\n                                   (SELECT Id, StepStatus, Comments \n                                    FROM Steps\n                                    ORDER BY CreatedDate DESC\n                                    LIMIT 1 )\n                               FROM ProcessInstance\n                               WHERE Id IN :processInstanceIds\n                               ORDER BY CreatedDate DESC])   \n    {                   \n      if ((pi.Steps[0].Comments == null || \n           pi.Steps[0].Comments.trim().length() == 0))\n      {\n        rejectedStatements.get(pi.TargetObjectId).addError(\n          'Operation Cancelled: Please provide a rejection reason!');\n      }\n    }  \n  }\n}",
 			"settings":
 			{
@@ -123,10 +135,56 @@
 			}
 		},
 		{
+			"file": "src/classes/AMEducationTrainingHandlerTest.cls",
+			"settings":
+			{
+				"buffer_size": 836,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/ApprovalManualShareHandler.cls",
+			"settings":
+			{
+				"buffer_size": 6267,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/classes/AMEducationTrainingHandler.cls",
 			"settings":
 			{
-				"buffer_size": 9368,
+				"buffer_size": 5390,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/ProcessRollBackTest.cls",
+			"settings":
+			{
+				"buffer_size": 12014,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "35.0 APEX_CODE,DEBUG;APEX_PROFILING,INFO;CALLOUT,INFO;DB,INFO;VALIDATION,INFO;WORKFLOW,INFO\nExecute Anonymous: // First, reserve email capacity for the current Apex transaction to ensure\nExecute Anonymous: // that we won't exceed our daily email limits when sending email after\nExecute Anonymous: // the current transaction is committed.\nExecute Anonymous: Messaging.reserveSingleEmailCapacity(2);\nExecute Anonymous: \nExecute Anonymous: // Processes and actions involved in the Apex transaction occur next,\nExecute Anonymous: // which conclude with sending a single email.\nExecute Anonymous: \nExecute Anonymous: // Now create a new single email message object\nExecute Anonymous: // that will send out a single email to the addresses in the To, CC & BCC list.\nExecute Anonymous: Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();\nExecute Anonymous: \nExecute Anonymous: // Strings to hold the email addresses to which you are sending the email.\nExecute Anonymous: String[] toAddresses = new String[] {'young_cheng@kinglai-hm.com'}; \nExecute Anonymous: String[] ccAddresses = new String[] {'young_cheng@kinglai-hm.com'};\nExecute Anonymous:   \nExecute Anonymous: \nExecute Anonymous: // Assign the addresses for the To and CC lists to the mail object.\nExecute Anonymous: mail.setToAddresses(toAddresses);\nExecute Anonymous: mail.setCcAddresses(ccAddresses);\nExecute Anonymous: \nExecute Anonymous: // Specify the address used when the recipients reply to the email. \nExecute Anonymous: mail.setReplyTo('support@acme.com');\nExecute Anonymous: \nExecute Anonymous: // Specify the name used as the display name.\nExecute Anonymous: mail.setSenderDisplayName('Salesforce Support');\nExecute Anonymous: \nExecute Anonymous: // Specify the subject line for your email address.\nExecute Anonymous: mail.setSubject('New Case Created : ' + case.Id);\nExecute Anonymous: \nExecute Anonymous: // Set to True if you want to BCC yourself on the email.\nExecute Anonymous: mail.setBccSender(false);\nExecute Anonymous: \nExecute Anonymous: // Optionally append the salesforce.com email signature to the email.\nExecute Anonymous: // The email address of the user executing the Apex Code will be used.\nExecute Anonymous: mail.setUseSignature(false);\nExecute Anonymous: \nExecute Anonymous: // Specify the text content of the email.\nExecute Anonymous: mail.setPlainTextBody('Your Case: ' + case.Id +' has been created.');\nExecute Anonymous: \nExecute Anonymous: mail.setHtmlBody('Your case:<b> ' + case.Id +' </b>has been created.<p>'+\nExecute Anonymous:      'To view your case <a href=https://***yourInstance***.salesforce.com/'+case.Id+'>click here.</a>');\nExecute Anonymous: \nExecute Anonymous: // Send the email you have created.\nExecute Anonymous: Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });\n14:58:00.17 (17945854)|USER_INFO|[EXTERNAL]|00528000005lirp|roger.ibmap@gmail.com|China Standard Time|GMT+08:00\n14:58:00.17 (17986028)|EXECUTION_STARTED\n14:58:00.17 (17991766)|CODE_UNIT_STARTED|[EXTERNAL]|execute_anonymous_apex\n14:58:00.17 (306545884)|EMAIL_QUEUE|[45]|replyTo: support@acme.com, subject: New Case Created : Id, senderDisplayName: Salesforce Support, bccSender: false, saveAsActivity: true, useSignature: false, toAddresses: [young_cheng@kinglai-hm.com], ccAddresses: [young_cheng@kinglai-hm.com], plainTextBody: Your Case: Id has been created., htmlBody: Your case:<b> Id </b>has been created.<p>To view your case <a href=https://***yourInstance***.salesforce.com/Id>click here.</a>, \n14:58:00.322 (322857121)|CUMULATIVE_LIMIT_USAGE\n14:58:00.322 (322857121)|LIMIT_USAGE_FOR_NS|(default)|\n  Number of SOQL queries: 0 out of 100\n  Number of query rows: 0 out of 50000\n  Number of SOSL queries: 0 out of 20\n  Number of DML statements: 0 out of 150\n  Number of DML rows: 0 out of 10000\n  Maximum CPU time: 0 out of 10000\n  Maximum heap size: 0 out of 6000000\n  Number of callouts: 0 out of 100\n  Number of Email Invocations: 1 out of 10\n  Number of future calls: 0 out of 50\n  Number of queueable jobs added to the queue: 0 out of 50\n  Number of Mobile Apex push calls: 0 out of 10\n\n14:58:00.322 (322857121)|CUMULATIVE_LIMIT_USAGE_END\n\n14:58:00.17 (322917868)|CODE_UNIT_FINISHED|execute_anonymous_apex\n14:58:00.17 (323814281)|EXECUTION_FINISHED\n",
+			"settings":
+			{
+				"buffer_size": 4264,
+				"line_ending": "Windows",
+				"name": "Execute Anonymous Result",
+				"scratch": true
+			}
+		},
+		{
+			"file": "src/classes/AMExpenseReimburseHandler.cls",
+			"settings":
+			{
+				"buffer_size": 5415,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -135,24 +193,52 @@
 			"file": "src/triggers/ApprovalManage1Trigger.trigger",
 			"settings":
 			{
-				"buffer_size": 1844,
+				"buffer_size": 2006,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/classes/AMAbnormalQualityHandler.cls-meta.xml",
+			"file": "src/classes/Utils.cls",
 			"settings":
 			{
-				"buffer_size": 174,
+				"buffer_size": 55191,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "trigger RequireRejectionComment on Invoice_Statement__c (before update)\n{\n\n    Map<Id, Invoice_Statement__c> rejectedStatements\n        = new Map<Id, Invoice_Statement__c> {};\n\n    for(Invoice_Statement__c inv : trigger.new)\n    {\n        /*\n          Get the old object record, and check if the approval status\n          field has been updated to rejected. If so, put it in a map\n          so we only have to use 1 SOQL query to do all checks.\n        */\n        Invoice_Statement__c oldInv = System.Trigger.oldMap.get(inv.Id);\n\n        if (oldInv.Approval_Status__c != 'Rejected'\n                && inv.Approval_Status__c == 'Rejected')\n        {\n            rejectedStatements.put(inv.Id, inv);\n        }\n    }\n\n    if (!rejectedStatements.isEmpty())\n    {\n        // UPDATE 2/1/2014: Get the most recent approval process instance for the object.\n        // If there are some approvals to be reviewed for approval, then\n        // get the most recent process instance for each object.\n        List<Id> processInstanceIds = new List<Id> {};\n\n        for (Invoice_Statement__c invs : [SELECT (SELECT ID\n                                          FROM ProcessInstances\n                                          ORDER BY CreatedDate DESC\n                                          LIMIT 1)\n                                          FROM Invoice_Statement__c\n                                          WHERE ID IN :rejectedStatements.keySet()])\n        {\n            processInstanceIds.add(invs.ProcessInstances[0].Id);\n        }\n\n        // Now that we have the most recent process instances, we can check\n        // the most recent process steps for comments.\n        for (ProcessInstance pi : [SELECT TargetObjectId,\n                                   (SELECT Id, StepStatus, Comments\n                                    FROM Steps\n                                    ORDER BY CreatedDate DESC\n                                    LIMIT 1 )\n                                   FROM ProcessInstance\n                                   WHERE Id IN :processInstanceIds\n                                   ORDER BY CreatedDate DESC])\n        {\n            if ((pi.Steps[0].Comments == null ||\n                    pi.Steps[0].Comments.trim().length() == 0))\n            {\n                rejectedStatements.get(pi.TargetObjectId).addError(\n                    'Operation Cancelled: Please provide a rejection reason!');\n            }\n        }\n    }\n}",
+			"file": "src/pages/EducationTrainingVF.page",
 			"settings":
 			{
-				"buffer_size": 2440,
+				"buffer_size": 13992,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/TestUtil.cls",
+			"settings":
+			{
+				"buffer_size": 61155,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/YoungUtil.cls",
+			"settings":
+			{
+				"buffer_size": 4077,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Approval_Managed1__c am = new Approval_Managed1__c();\nSystem.debug(YoungUtil.getType(am));\n\n\n\n\n\n\ntrigger RequireRejectionComment on Invoice_Statement__c (before update)\n{\n\n    Map<Id, Invoice_Statement__c> rejectedStatements\n        = new Map<Id, Invoice_Statement__c> {};\n\n    for(Invoice_Statement__c inv : trigger.new)\n    {\n        /*\n          Get the old object record, and check if the approval status\n          field has been updated to rejected. If so, put it in a map\n          so we only have to use 1 SOQL query to do all checks.\n        */\n        Invoice_Statement__c oldInv = System.Trigger.oldMap.get(inv.Id);\n\n        if (oldInv.Approval_Status__c != 'Rejected'\n                && inv.Approval_Status__c == 'Rejected')\n        {\n            rejectedStatements.put(inv.Id, inv);\n        }\n    }\n\n    if (!rejectedStatements.isEmpty())\n    {\n        // UPDATE 2/1/2014: Get the most recent approval process instance for the object.\n        // If there are some approvals to be reviewed for approval, then\n        // get the most recent process instance for each object.\n        List<Id> processInstanceIds = new List<Id> {};\n\n        for (Invoice_Statement__c invs : [SELECT (SELECT ID\n                                          FROM ProcessInstances\n                                          ORDER BY CreatedDate DESC\n                                          LIMIT 1)\n                                          FROM Invoice_Statement__c\n                                          WHERE ID IN :rejectedStatements.keySet()])\n        {\n            processInstanceIds.add(invs.ProcessInstances[0].Id);\n        }\n\n        // Now that we have the most recent process instances, we can check\n        // the most recent process steps for comments.\n        for (ProcessInstance pi : [SELECT TargetObjectId,\n                                   (SELECT Id, StepStatus, Comments\n                                    FROM Steps\n                                    ORDER BY CreatedDate DESC\n                                    LIMIT 1 )\n                                   FROM ProcessInstance\n                                   WHERE Id IN :processInstanceIds\n                                   ORDER BY CreatedDate DESC])\n        {\n            if ((pi.Steps[0].Comments == null ||\n                    pi.Steps[0].Comments.trim().length() == 0))\n            {\n                rejectedStatements.get(pi.TargetObjectId).addError(\n                    'Operation Cancelled: Please provide a rejection reason!');\n            }\n        }\n    }\n}",
+			"settings":
+			{
+				"buffer_size": 2537,
 				"line_ending": "Windows"
 			}
 		}
@@ -202,15 +288,24 @@
 		"/D/mmworkspace/SB_Cheng",
 		"/D/mmworkspace/SB_Cheng/config",
 		"/D/mmworkspace/SB_Cheng/src",
-		"/D/mmworkspace/SB_Cheng/src/pages",
+		"/D/mmworkspace/SB_Cheng/src/classes",
 		"/D/mmworkspace/SB_Cheng/src/triggers"
 	],
 	"file_history":
 	[
+		"/C/Users/young_cheng/Desktop/salesforceApexEmailExample",
+		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalPermissionHandler.cls",
+		"/D/mmworkspace/SB_Cheng/src/triggers/ProcessRollBackTest.trigger",
+		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/DocBlockr/README.md",
+		"/D/mmworkspace/SB_Cheng/src/classes/Utils.cls",
+		"/D/mmworkspace/SB_Cheng/src/triggers/TestTrigger.trigger",
+		"/D/mmworkspace/SB_Cheng/src/triggers/HelloWorldTrigger.trigger",
+		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMAbnormalQualityHandler.cls-meta.xml",
+		"/D/mmworkspace/SB_Cheng/src/triggers/ApprovalManage1Trigger.trigger",
 		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingController.cls",
 		"/D/mmworkspace/SB_Cheng/src/pages/EducationTrainingVF.page",
 		"/D/mmworkspace/SB_Cheng/src/pages/TimeLineTest.page",
-		"/D/mmworkspace/SB_Cheng/src/classes/Utils.cls",
 		"/D/mmworkspace/SB_Cheng/src/classes/AMStaffTransferExtension.cls",
 		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalHomeController.cls",
 		"/D/mmworkspace/SB_Cheng/src/pages/ApprovalHome.page",
@@ -220,13 +315,11 @@
 		"/D/mmworkspace/SB_Cheng/src/pages/MyCustomLookup.page",
 		"/D/mmworkspace/SB_Cheng/src/classes/MyCustomLookupController.cls",
 		"/D/mmworkspace/SB_Cheng/src/pages/ApexParam1.page",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
 		"/C/Users/young_cheng/Desktop/網購平台JS_配置_Join2Menu.js",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/CodeFormatter/CodeFormatter.sublime-settings",
 		"/D/mmworkspace/SB_Cheng/src/classes/AccountRemoter.cls",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/CodeFormatter/Default (Windows).sublime-keymap",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/DocBlockr/README.md",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/SublimeAStyleFormatter/SublimeAStyleFormatter.sublime-settings",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/SublimeAStyleFormatter/Default (Windows).sublime-keymap",
 		"/D/mmworkspace/SB_Cheng/src/classes/ApexParam1Controller.cls",
@@ -319,13 +412,15 @@
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 27.0
 	},
 	"find_in_files":
 	{
 		"height": 104.0,
 		"where_history":
 		[
+			"D:\\mmworkspace\\SB_Cheng",
+			"D:\\mmworkspace\\SB_Cheng\\src\\classes",
 			""
 		]
 	},
@@ -334,6 +429,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"部門",
+			"adderror",
+			"你没有权限修改当前记录",
 			"AMEducationTraining",
 			"IN TestTrigger",
 			"IN Trigger",
@@ -364,7 +462,7 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 13,
 			"sheets":
 			[
 				{
@@ -373,28 +471,28 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3844,
+						"buffer_size": 3870,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2464,
-								2464
+								1630,
+								1630
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
+							"syntax": "Packages/Java/Java.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1311.0,
+						"translation.y": 570.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -403,15 +501,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13379,
+						"buffer_size": 13381,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12505,
-								12505
+								73,
+								93
 							]
 						],
 						"settings":
@@ -419,71 +517,42 @@
 							"syntax": "Packages/MavensMate/sublime/lang/Visualforce.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4327.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "src/triggers/TestTrigger.trigger",
+					"file": "src/classes/AMEducationTrainingExtensionTest.cls",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2496,
+						"buffer_size": 2745,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2330,
-								2464
+								1148,
+								1148
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Java/Java.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Java/Java.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 570.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "src/triggers/HelloWorldTrigger.trigger",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 163,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								117,
-								129
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"semi_transient": false,
 					"settings":
 					{
@@ -494,8 +563,8 @@
 						"selection":
 						[
 							[
-								391,
-								398
+								592,
+								592
 							]
 						],
 						"settings":
@@ -508,40 +577,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1207,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								241,
-								265
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/JSON.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 57.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
+					"buffer": 4,
 					"semi_transient": false,
 					"settings":
 					{
@@ -566,7 +606,65 @@
 						"translation.y": 342.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/classes/AMEducationTrainingHandlerTest.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 836,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								833,
+								833
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/classes/ApprovalManualShareHandler.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6267,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4913,
+								4913
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 570.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -575,15 +673,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9368,
+						"buffer_size": 5390,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3431,
-								3431
+								739,
+								739
 							]
 						],
 						"settings":
@@ -593,27 +691,83 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1083.0,
+						"translation.y": 171.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
-					"file": "src/triggers/ApprovalManage1Trigger.trigger",
+					"file": "src/classes/ProcessRollBackTest.cls",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1844,
+						"buffer_size": 12014,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								34,
-								54
+								9800,
+								9800
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3519.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4264,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4264,
+								4264
+							]
+						],
+						"settings":
+						{
+							"is_debug_log": true,
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 684.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/classes/AMExpenseReimburseHandler.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5415,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2329,
+								2329
 							]
 						],
 						"settings":
@@ -626,51 +780,171 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "src/classes/AMAbnormalQualityHandler.cls-meta.xml",
+					"buffer": 11,
+					"file": "src/triggers/ApprovalManage1Trigger.trigger",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 174,
+						"buffer_size": 2006,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1538,
+								1679
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/XML/XML.sublime-syntax"
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 12,
+					"file": "src/classes/Utils.cls",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2440,
+						"buffer_size": 55191,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1043,
-								1043
+								41008,
+								41008
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/pages/EducationTrainingVF.page",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13992,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2430,
+								2430
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MavensMate/sublime/lang/Visualforce.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1026.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/classes/TestUtil.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 61155,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								38661,
+								38661
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12654.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "src/classes/YoungUtil.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								198,
+								198
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2537,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								91,
+								0
 							]
 						],
 						"settings":
@@ -680,10 +954,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 513.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 14,
 					"type": "text"
 				}
 			]
@@ -722,7 +996,7 @@
 	"menu_visible": true,
 	"output.MavensMate-OutputPanel":
 	{
-		"height": 126.0
+		"height": 131.0
 	},
 	"output.error":
 	{
@@ -745,6 +1019,26 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"vf",
+				"src\\pages\\EducationTrainingVF.page"
+			],
+			[
+				"approvalmanualsharehandler",
+				"src\\classes\\ApprovalManualShareHandler.cls"
+			],
+			[
+				"",
+				"src\\classes\\AMEducationTrainingHandler.cls"
+			],
+			[
+				"utils",
+				"src\\classes\\Utils.cls"
+			],
+			[
+				"uit",
+				"src\\classes\\Utils.cls"
+			],
 			[
 				"home",
 				"src\\pages\\ApprovalHome.page"
@@ -834,7 +1128,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 404.0,
+	"side_bar_width": 546.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
