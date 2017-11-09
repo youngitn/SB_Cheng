@@ -68,6 +68,16 @@
         //alert('OK');
         j$('#participantsTable').find('input[name^="j_id0"]');
     }
+    function setInputAccount()
+    {   
+        var a ='';
+        j$("input[name$='_lkid']").each(function(index, el) {
+            a+=j$( this ).val()+'____';
+        });
+        alert(a);
+        
+        
+    }
             </script>
         </head>
         <body>
@@ -77,6 +87,7 @@
             <apex:pagemessages escape="true">
             </apex:pagemessages>
             <apex:form id="edform">
+            <a onclick="setInputAccount()" >AAAA</a>
                 <!-- <apex:actionfunction action="{!deleteRow}" id="deleteRow" name="deleteRow" rerender="output1">
                     <apex:param assignto="{!rowID}" name="rowID" value="">
                     </apex:param>
@@ -85,8 +96,8 @@
                     <apex:param assignto="{!rowID}" name="rowID" value="">
                     </apex:param>
                 </apex:actionfunction> -->
-                <apex:pageblock>
-                    <apex:pageblockbuttons>
+                <apex:pageblock >
+                    <apex:pageblockbuttons >
                         <apex:commandbutton action="{!save}" id="doSave" value="保存">
                         </apex:commandbutton>
                         <apex:commandbutton action="{!Cancel}" value="取消">
@@ -162,7 +173,7 @@
                         <apex:inputfield id="EducationTrainingLocation" value="{!am.EducationTrainingLocation__c}">
                         </apex:inputfield>
                         <!--  12、內訓講師員工編號(填空題) -->
-                        <apex:inputfield id="EducationTrainingInHouseLecturerId" value="{!am.EducationTrainingInHouseLecturerId__c}">
+                        <apex:inputfield id="EducationTrainingInHouseLecturerId" value="{!am.EducationTrainingInHouseLecturerName__c}">
                         </apex:inputfield>
                         <!-- 如果教育訓練類別 = 內訓 顯示參訓人員 -->
                         <apex:pageblocksection id="participants" title="參訓人員">
