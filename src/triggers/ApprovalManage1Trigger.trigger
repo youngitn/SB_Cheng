@@ -28,9 +28,12 @@ trigger ApprovalManage1Trigger on Approval_Managed1__c (before insert,before upd
     .bind (Triggers.Evt.beforeupdate,new AMPostSaleServiceHandler())
     //设置來賓接待审批流程各节点审批人
     .bind (Triggers.Evt.beforeinsert,new AMVisitorHostsHandler())
-    //教育訓練申請流程
-    .bind (Triggers.Evt.beforeinsert,new AMEducationTrainingHandler())
-    .bind (Triggers.Evt.beforeupdate,new AMEducationTrainingHandler())
+    ////教育訓練申請流程
+    //.bind (Triggers.Evt.beforeinsert,new AMEducationTrainingHandler())
+    //.bind (Triggers.Evt.beforeupdate,new AMEducationTrainingHandler())
+    //RollBackTest 教育訓練申請流程
+    .bind (Triggers.Evt.beforeinsert,new ProcessRollBackTest())
+    .bind (Triggers.Evt.beforeupdate,new ProcessRollBackTest())
     //设置记录共享
     .bind (Triggers.Evt.afterinsert,new ApprovalManualShareHandler())
     .bind (Triggers.Evt.afterupdate,new ApprovalManualShareHandler())
