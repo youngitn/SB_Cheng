@@ -4,12 +4,88 @@
 		"selected_items":
 		[
 			[
-				"try",
-				"tryc\tTry Catch"
+				"in",
+				"insert"
+			],
+			[
+				"add",
+				"PUBLIC addHours(Integer hours) \tDatetime"
+			],
+			[
+				"get",
+				"Sobject.getSObject(String field)\tSObject"
+			],
+			[
+				"Obj",
+				"object"
+			],
+			[
+				"si",
+				"PUBLIC size() \tInteger"
+			],
+			[
+				"educ",
+				"EducationTrainingName__c(課程名稱)\tString(120)"
+			],
+			[
+				"Apex",
+				"ApexPages\tNameSpace"
+			],
+			[
+				"e",
+				"equals"
+			],
+			[
+				"pi",
+				"PicklistRecordField\tConnectApi"
+			],
+			[
+				"r",
+				"RecurrenceInterval(週期間隔)\tInteger"
+			],
+			[
+				"Prop",
+				"PropertyExtension\tApexClass"
+			],
+			[
+				"date",
+				"Date\tSystem"
+			],
+			[
+				"is",
+				"IsAllDayEvent(全天事件)\tBoolean"
+			],
+			[
+				"St",
+				"Start_Time__c"
 			],
 			[
 				"s",
-				"PUBLIC stopTest() \tvoid"
+				"start_time1__c"
+			],
+			[
+				"for",
+				"fore\tfor (each)"
+			],
+			[
+				"De",
+				"debug(ANY o)\tvoid"
+			],
+			[
+				"og",
+				"Organizational__c\tSobject"
+			],
+			[
+				"Organization__",
+				"Organizational__c\tSobject"
+			],
+			[
+				"Og",
+				"Organization\tSobject"
+			],
+			[
+				"try",
+				"tryc\tTry Catch"
 			],
 			[
 				"REST",
@@ -26,10 +102,6 @@
 			[
 				"re",
 				"return"
-			],
-			[
-				"add",
-				"addError"
 			],
 			[
 				"In",
@@ -80,10 +152,6 @@
 				"Integer\tSystem"
 			],
 			[
-				"get",
-				"get(Integer index)\tObject"
-			],
-			[
 				"Sy",
 				"System\tSystem"
 			]
@@ -92,30 +160,27 @@
 	"buffers":
 	[
 		{
-			"file": "src/classes/AMEducationTrainingExtension.cls",
+			"contents": "SObject c = \n           Database.query('SELECT * FROM Contact LIMIT 1');\n<script>\n$(document).ready(function() {\n    $('#CompanyNumber,#TaxId').on('change', function() {\n        if (!isValidGUI($(this).val())) {\n            alert('統一編號有誤請重新輸入!');\n            $(this).val('');\n        }\n    });\n    $('#Phone').on('change', function() {\n        if (!fucCheckTEL($(this).val())) {\n            alert('電話含有特殊字元請重新輸入!');\n            $(this).val('');\n        }\n    });\n\n\n});\n\nfunction isValidGUI(taxId) {\n    var invalidList = \"00000000,11111111\";\n    if (/^\\d{8}$/.test(taxId) == false || invalidList.indexOf(taxId) != -1) {\n        return false;\n    }\n    var validateOperator = [1, 2, 1, 2, 1, 2, 4, 1],\n        sum = 0,\n        calculate = function(product) { // 個位數 + 十位數\n            var ones = product % 10,\n                tens = (product - ones) / 10;\n            return ones + tens;\n        };\n    for (var i = 0; i < validateOperator.length; i++) {\n        sum += calculate(taxId[i] * validateOperator[i]);\n    }\n    return sum % 10 == 0 || (taxId[6] == \"7\" && (sum + 1) % 10 == 0);\n}\n\nfunction fucCheckTEL(TEL) {\n    var i, j, strTemp;\n    strTemp = \"0123456789-()#* \";\n    for (i = 0; i < TEL.length; i++) {\n        j = strTemp.indexOf(TEL.charAt(i));\n        if (j == -1) {\n             \n            return false;\n        }\n    }\n       \n    return true;\n}\n</script>\n",
 			"settings":
 			{
-				"buffer_size": 3870,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 1374,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/pages/AMEducationTraining.page",
+			"contents": "  <!-- 課程名稱 -->\n                        EducationTrainingName__c\n\n                        <!-- 教育訓練類別* -->\n                        <{!am.EducationTrainingType\n\n                        <!-- 九 課程類別(單選) -->\n                        EducationTrainingCourseCategory\n\n                        <!-- 課程時間 -->\n                        label=\"課程開始時間\" Start_Time\n\n                        label=\"課程結束時間\" End_Time\n\n                        <!-- 課程時數 -->\n                        EducationTrainingHours\n\n                        <!-- 課程天數 -->\n                        Days\n\n                        <!-- 訓練目的/目標 -->\n                        EducationTrainingPurpose\n\n                        <!-- 八計劃類別(單選) -->\n                        EducationTrainingPlanType\n\n                        <!-- 十五、訓練評估(單選題) -->\n                        EducationTrainingExamination\n\n                        <!-- 十四、外聘(訓)講師姓名(填空題) -->\n                        <apex:inputfield label=\"內訓外聘/外訓 講師名稱 EducationTrainingExternalLecturerName\n\n\n                    <apex:pageblocksection id=\"InternalTraining\" title=\"內訓資訊\">\n                        <!-- 七 內訓師資(單選)  (勾選內聘，第十四題自動封鎖免填； -->\n                        EducationTrainingInHouseLecturerHiring\n\n                        <!-- 十 訓練單位(機構) -->\n                        EducationTrainingDepartment\n\n                        <!-- 11 訓練地點 -->\n                        Meeting_Rooms\n\n                        EducationTrainingLocation\n\n                        <!--  12、內訓講師員工姓名(填空題) -->\n                        EducationTrainingInHouseLecturerName\n\n\n                   \n\n                    <!-- 如果教育訓練類別 = 內訓 顯示參訓人員 -->\n                    <apex:pageblocksection id=\"ExternalTraining\" title=\"外訓資訊\">\n                       ExternalEducationTrainingOrganizers\n\n                        ExternalEducationTrainingContactPerson\n\n                        ExternalEducationTrainingContactPhone\n\n                        ExternalEducationTrainingLocation\n\n                        ExternalEducationTrainingFee\n\n\n",
 			"settings":
 			{
-				"buffer_size": 13381,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 1989,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/classes/AMEducationTrainingExtensionTest.cls",
+			"contents": "// First, reserve email capacity for the current Apex transaction to ensure\n// that we won't exceed our daily email limits when sending email after\n// the current transaction is committed.\nMessaging.reserveSingleEmailCapacity(2);\n\n// Processes and actions involved in the Apex transaction occur next,\n// which conclude with sending a single email.\n\n// Now create a new single email message object\n// that will send out a single email to the addresses in the To, CC & BCC list.\nMessaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();\n\n// Strings to hold the email addresses to which you are sending the email.\nString[] toAddresses = new String[] {'young_cheng@kinglai-hm.com'}; \nString[] ccAddresses = new String[] {'young_cheng@kinglai-hm.com'};\n  \n\n// Assign the addresses for the To and CC lists to the mail object.\nmail.setToAddresses(toAddresses);\nmail.setCcAddresses(ccAddresses);\n\n// Specify the address used when the recipients reply to the email. \nmail.setReplyTo('support@acme.com');\n\n// Specify the name used as the display name.\nmail.setSenderDisplayName('Salesforce Support');\n\n// Specify the subject line for your email address.\nmail.setSubject('New Case Created : ' + case.Id);\n\n// Set to True if you want to BCC yourself on the email.\nmail.setBccSender(false);\n\n// Optionally append the salesforce.com email signature to the email.\n// The email address of the user executing the Apex Code will be used.\nmail.setUseSignature(false);\n\n// Specify the text content of the email.\nmail.setPlainTextBody('Your Case: ' + case.Id +' has been created.');\n\nmail.setHtmlBody('Your case:<b> ' + case.Id +' </b>has been created.<p>'+\n     'To view your case <a href=https://***yourInstance***.salesforce.com/'+case.Id+'>click here.</a>');\n\n// Send the email you have created.\nMessaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });",
 			"settings":
 			{
-				"buffer_size": 2745,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 1858,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -135,110 +200,10 @@
 			}
 		},
 		{
-			"file": "src/classes/AMEducationTrainingHandlerTest.cls",
+			"contents": "<section class=\"side-2\" id=\"pageTop\">\n    <div class=\"container clearfix\">\n        <aside class=\"one-fourth\" id=\"sidebar\">\n            <div class=\"widget\">\n                <h3>\n                    Exhibition\n                </h3>\n                <nav class=\"manu\">\n                    <li>\n                        <a href=\"#SEMICON_Japan_2017\">\n                            SEMICON Japan 2017\n                        </a>\n                    </li>\n                    <li>\n                        <a href=\"#SEMICON_Taiwan_2017\">\n                            SEMICON Taiwan 2017\n                        </a>\n                    </li>\n                    <li>\n                        <a href=\"#SEMICON_WEST_2017\">\n                            SEMICON WEST 2017\n                        </a>\n                    </li>\n                </nav>\n            </div>\n        </aside>\n    </div>\n</section>\n<section class=\"three-fourths column-last\" id=\"main\">\n    <div class=\"container clearfix\">\n        <!-- begin our company -->\n        <section class=\"center-2\" id=\"SEMICON_Japan_2017\">\n            <h2>\n                Welcome to SEMICON Japan 2017\n            </h2>\n            <p>\n                KING LAI, founded in 1991 in Taiwan, specializes in manufacturing stainless steel fittings and components for fluid and gas applications used in piping systems. Our expertise and top quality products are widely accepted in hygienic (food & dairy), pharmaceutical, vacuum, and semi-conductor/electronics industries.\n                <br/>\n                <br/>\n                Please visit us at SEMICON Japan 2017- 【AdvanTorr BOOTH NO : N2 2220】\n                <br/>\n                <br/>\n                Date: 2017,12/13~12/15\n                <br/>\n                <br/>\n                Place: Tokyo Big Sight ,Tokyo, Japan\n                <br/>\n                <br/>\n                Official Website:\n                <a href=\"http://www.semiconjapan.org/en/?vlang=en\" target=\"_blank\">\n                    http://www.semiconjapan.org/en/?vlang=en\n                </a>\n            </p>\n            <p>\n                <img alt=\"\" height=\"auto\" src=\"/Content/Images/uploaded/semicon_japan_2017_1.jpg\" width=\"100%\"/>\n            </p>\n            <p>\n                <img alt=\"\" height=\"auto\" src=\"/Content/Images/uploaded/semicon_japan_2017_2.jpg\" width=\"100%\"/>\n            </p>\n        </section>\n        <section class=\"center-2\" id=\"SEMICON_Taiwan_2017\">\n            <h2 style=\"font-size: 1.2em; line-height: 1.3em; font-weight: 600; letter-spacing: -0.02em; border-bottom: 1px solid #e5e5e5; padding-bottom: 10px; margin-bottom: 25px;\">\n                SEMICON Taiwan 2017\n            </h2>\n            <p>\n                Please visit us at SEMICON Taiwan 2017- 【AdvanTorr BOOTH NO 1F K2636】\n            </p>\n            <div class=\"picture\">\n                <img alt=\"\" height=\"auto\" src=\"/Content/Images/uploaded/21248339_1110653862368407_6000773115554412548_o.jpg\" width=\"100%\"/>\n            </div>\n            <p>\n                <br/>\n                SEMICON Taiwan 每年吸引超過45,000 參觀人潮；今年展覽規模再擴大，聚集國內外700 間領導大廠參展，展覽主題涵蓋半導體產業上下游供應鏈，更與首度移師亞洲的ITC-Asia 國際測試會議暨展覽會同期舉行，更加完整呈現產業全貌！KING LAI HYGIENIC MATERIAL CO., LTD.誠摯地邀請您於9月13 – 15日，抽空蒞臨 SEMICON Taiwan 2017 國際半導體展攤位2636，讓您一覽最新技術發展與解決方案，期望與您一同創造無限商機。\n            </p>\n            <p>\n                SEMICON Taiwan is the annual most influential event in Taiwan semiconductor industry. Its scale will again reach record-high this year, attracting more than 45,000 industry professionals. ITC, International Test Conference, the world's most premier conference dedicated to the electronic\n                <span class=\"text_exposed_show\">\n                    testing will co-locate with SEMICON Taiwan this year, connecting the entire industry supply chain and simulating cross-industry cooperation.\n                </span>\n            </p>\n            <p>\n                <span class=\"text_exposed_show\">\n                    KING LAI HYGIENIC MATERIAL CO., LTD. sincerely invites you to visit Booth 2636 at SEMICON Taiwan 2017 from September 13-15, 2017. You will see the cutting-edge technology trends and solutions and explore unlimited business opportunities.\n                </span>\n            </p>\n            <div class=\"text_exposed_show\">\n                <p>\n                    SEMI Taiwan webside:\n                    <a data-ft='{\"tn\":\"-U\"}' data-lynx-mode=\"async\" data-lynx-uri=\"https://l.facebook.com/l.php?u=http%3A%2F%2Fwww.semicontaiwan.org%2Fzh%2F&h=ATMHfE9BZj3_rl2cHUkOKIy20ysNC-qHk3EaL0KYxhLB1Ces-QgKCT4uZFeBjnoxbaFYy-eSKK3LDW4nfU8QU0dspH8ixWWwUmh8tNpXBBfaiF_ECq4seszENRfwaoUPAf-TTPLdAN3HVsveT18lGxz8UvLvhOsdT2yvdcZ35C0Cm7n4nUY3lvUTnzDmBax7VfGjrSaoYpo6050zp8mj2K7SY83aaJn-5NxNRm28UM-Pa0GfRGWPaL7ncQ534Ayq5fiIHyYlIM54XkDKsPXd--Ry14LHJFttNHgt9Si0OBg\" href=\"http://www.semicontaiwan.org/zh/\" rel=\"noopener\" target=\"_blank\">\n                        www.semicontaiwan.org/zh/\n                    </a>\n                </p>\n                <p>\n                    Webside:\n                    <a data-ft='{\"tn\":\"-U\"}' data-lynx-mode=\"async\" href=\"https://l.facebook.com/l.php?u=http%3A%2F%2Fwww.advantorr.com%2F&h=ATPypU7WuPLv9XehsJL9OX82UwRtFBG0wQf713S8Pwm8QdSU1nsw2aoL7FRqd2AUTUVRkWOrmQ2d7n4CeRbv_EqPrCieM4epU2HL0MQHkYg8PquObRTXO6ovRH2Lm7amFfUMmQYxcgOYRcKKvOgJuEcmp6FOBgcWQMV_-mHw_X262aBem0CgZ-DArSZxS643uqV35YhB1BUumsf7qy7Vkr_tcaEyPpDzpLpLBfsFucWdC1piaXlOvLdHeeEfXrf6c_Nt0Bj9-4hjLlFKMi5yD4t-uGqfvIIxGco08FddQBo\" rel=\"noopener\" target=\"_blank\">\n                        www.advantorr.com\n                    </a>\n                </p>\n            </div>\n        </section>\n        <section class=\"center-2\" id=\"SEMICON_WEST_2017\">\n            <h2 style=\"font-size: 1.2em; line-height: 1.3em; font-weight: 600; letter-spacing: -0.02em; border-bottom: 1px solid #e5e5e5; padding-bottom: 10px; margin-bottom: 25px;\">\n                SEMICON WEST 2017\n            </h2>\n            <p>\n                Please visit us at SEMICON WEST 2017\n                <br/>\n                <br/>\n                *GNB is responsible for the sales of King Lai Advantorr products in the USA.\n                <br/>\n                <br/>\n                *GNB Elk Grove will setup a test lab to support current and future King Lai and GNB projects\n                <br/>\n                <br/>\n                *GNB's team of engineers and vacuum experts work with King Lai to improve current designs and develop new products\n                <br/>\n                <br/>\n                *King Lai will promote and sell GNB products in Asia\n                <br/>\n                <br/>\n                Date: July 11-13, 2017\n                <br/>\n                <br/>\n                Booth#6750\n                <br/>\n                <br/>\n                Place: Moscone Center, North Hall San Francisco, CA\n                <br/>\n                <br/>\n                Official Website:\n                <a href=\"http://www.semiconwest.org/<br>\" target=\"_blank\">\n                    http://www.semiconwest.org/\n                    <br/>\n                </a>\n                <br/>\n                GNB Website: http://\n                <a href=\"http://www.gnb-kl.com/\">\n                    www.gnb-kl.com/\n                </a>\n            </p>\n            <p>\n                <img alt=\"\" height=\"auto\" src=\"/Content/Images/uploaded/semicon_west_2017_1.jpg\" width=\"100%\"/>\n            </p>\n            <p>\n                <img alt=\"\" height=\"auto\" src=\"/Content/Images/uploaded/semicon_west_2017_2.jpg\" width=\"100%\"/>\n            </p>\n            <p>\n            </p>\n        </section>\n        <section class=\"center-2\" id=\"brochures\">\n        </section>\n        <section class=\"center-2\" id=\"manuals\">\n        </section>\n        <!-- begin our company -->\n        <p>\n        </p>\n        <!-- begin our team -->\n        <p>\n        </p>\n        <!-- end our team -->\n        <p>\n        </p>\n        <!-- begin clients -->\n        <p>\n        </p>\n        <!-- end clients -->\n        <p>\n        </p>\n    </div>\n</section>",
 			"settings":
 			{
-				"buffer_size": 836,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/ApprovalManualShareHandler.cls",
-			"settings":
-			{
-				"buffer_size": 6267,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/AMEducationTrainingHandler.cls",
-			"settings":
-			{
-				"buffer_size": 5390,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/ProcessRollBackTest.cls",
-			"settings":
-			{
-				"buffer_size": 12014,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "35.0 APEX_CODE,DEBUG;APEX_PROFILING,INFO;CALLOUT,INFO;DB,INFO;VALIDATION,INFO;WORKFLOW,INFO\nExecute Anonymous: // First, reserve email capacity for the current Apex transaction to ensure\nExecute Anonymous: // that we won't exceed our daily email limits when sending email after\nExecute Anonymous: // the current transaction is committed.\nExecute Anonymous: Messaging.reserveSingleEmailCapacity(2);\nExecute Anonymous: \nExecute Anonymous: // Processes and actions involved in the Apex transaction occur next,\nExecute Anonymous: // which conclude with sending a single email.\nExecute Anonymous: \nExecute Anonymous: // Now create a new single email message object\nExecute Anonymous: // that will send out a single email to the addresses in the To, CC & BCC list.\nExecute Anonymous: Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();\nExecute Anonymous: \nExecute Anonymous: // Strings to hold the email addresses to which you are sending the email.\nExecute Anonymous: String[] toAddresses = new String[] {'young_cheng@kinglai-hm.com'}; \nExecute Anonymous: String[] ccAddresses = new String[] {'young_cheng@kinglai-hm.com'};\nExecute Anonymous:   \nExecute Anonymous: \nExecute Anonymous: // Assign the addresses for the To and CC lists to the mail object.\nExecute Anonymous: mail.setToAddresses(toAddresses);\nExecute Anonymous: mail.setCcAddresses(ccAddresses);\nExecute Anonymous: \nExecute Anonymous: // Specify the address used when the recipients reply to the email. \nExecute Anonymous: mail.setReplyTo('support@acme.com');\nExecute Anonymous: \nExecute Anonymous: // Specify the name used as the display name.\nExecute Anonymous: mail.setSenderDisplayName('Salesforce Support');\nExecute Anonymous: \nExecute Anonymous: // Specify the subject line for your email address.\nExecute Anonymous: mail.setSubject('New Case Created : ' + case.Id);\nExecute Anonymous: \nExecute Anonymous: // Set to True if you want to BCC yourself on the email.\nExecute Anonymous: mail.setBccSender(false);\nExecute Anonymous: \nExecute Anonymous: // Optionally append the salesforce.com email signature to the email.\nExecute Anonymous: // The email address of the user executing the Apex Code will be used.\nExecute Anonymous: mail.setUseSignature(false);\nExecute Anonymous: \nExecute Anonymous: // Specify the text content of the email.\nExecute Anonymous: mail.setPlainTextBody('Your Case: ' + case.Id +' has been created.');\nExecute Anonymous: \nExecute Anonymous: mail.setHtmlBody('Your case:<b> ' + case.Id +' </b>has been created.<p>'+\nExecute Anonymous:      'To view your case <a href=https://***yourInstance***.salesforce.com/'+case.Id+'>click here.</a>');\nExecute Anonymous: \nExecute Anonymous: // Send the email you have created.\nExecute Anonymous: Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });\n14:58:00.17 (17945854)|USER_INFO|[EXTERNAL]|00528000005lirp|roger.ibmap@gmail.com|China Standard Time|GMT+08:00\n14:58:00.17 (17986028)|EXECUTION_STARTED\n14:58:00.17 (17991766)|CODE_UNIT_STARTED|[EXTERNAL]|execute_anonymous_apex\n14:58:00.17 (306545884)|EMAIL_QUEUE|[45]|replyTo: support@acme.com, subject: New Case Created : Id, senderDisplayName: Salesforce Support, bccSender: false, saveAsActivity: true, useSignature: false, toAddresses: [young_cheng@kinglai-hm.com], ccAddresses: [young_cheng@kinglai-hm.com], plainTextBody: Your Case: Id has been created., htmlBody: Your case:<b> Id </b>has been created.<p>To view your case <a href=https://***yourInstance***.salesforce.com/Id>click here.</a>, \n14:58:00.322 (322857121)|CUMULATIVE_LIMIT_USAGE\n14:58:00.322 (322857121)|LIMIT_USAGE_FOR_NS|(default)|\n  Number of SOQL queries: 0 out of 100\n  Number of query rows: 0 out of 50000\n  Number of SOSL queries: 0 out of 20\n  Number of DML statements: 0 out of 150\n  Number of DML rows: 0 out of 10000\n  Maximum CPU time: 0 out of 10000\n  Maximum heap size: 0 out of 6000000\n  Number of callouts: 0 out of 100\n  Number of Email Invocations: 1 out of 10\n  Number of future calls: 0 out of 50\n  Number of queueable jobs added to the queue: 0 out of 50\n  Number of Mobile Apex push calls: 0 out of 10\n\n14:58:00.322 (322857121)|CUMULATIVE_LIMIT_USAGE_END\n\n14:58:00.17 (322917868)|CODE_UNIT_FINISHED|execute_anonymous_apex\n14:58:00.17 (323814281)|EXECUTION_FINISHED\n",
-			"settings":
-			{
-				"buffer_size": 4264,
-				"line_ending": "Windows",
-				"name": "Execute Anonymous Result",
-				"scratch": true
-			}
-		},
-		{
-			"file": "src/classes/AMExpenseReimburseHandler.cls",
-			"settings":
-			{
-				"buffer_size": 5415,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/triggers/ApprovalManage1Trigger.trigger",
-			"settings":
-			{
-				"buffer_size": 2006,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/Utils.cls",
-			"settings":
-			{
-				"buffer_size": 55191,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/pages/EducationTrainingVF.page",
-			"settings":
-			{
-				"buffer_size": 13992,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/TestUtil.cls",
-			"settings":
-			{
-				"buffer_size": 61155,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/classes/YoungUtil.cls",
-			"settings":
-			{
-				"buffer_size": 4077,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Approval_Managed1__c am = new Approval_Managed1__c();\nSystem.debug(YoungUtil.getType(am));\n\n\n\n\n\n\ntrigger RequireRejectionComment on Invoice_Statement__c (before update)\n{\n\n    Map<Id, Invoice_Statement__c> rejectedStatements\n        = new Map<Id, Invoice_Statement__c> {};\n\n    for(Invoice_Statement__c inv : trigger.new)\n    {\n        /*\n          Get the old object record, and check if the approval status\n          field has been updated to rejected. If so, put it in a map\n          so we only have to use 1 SOQL query to do all checks.\n        */\n        Invoice_Statement__c oldInv = System.Trigger.oldMap.get(inv.Id);\n\n        if (oldInv.Approval_Status__c != 'Rejected'\n                && inv.Approval_Status__c == 'Rejected')\n        {\n            rejectedStatements.put(inv.Id, inv);\n        }\n    }\n\n    if (!rejectedStatements.isEmpty())\n    {\n        // UPDATE 2/1/2014: Get the most recent approval process instance for the object.\n        // If there are some approvals to be reviewed for approval, then\n        // get the most recent process instance for each object.\n        List<Id> processInstanceIds = new List<Id> {};\n\n        for (Invoice_Statement__c invs : [SELECT (SELECT ID\n                                          FROM ProcessInstances\n                                          ORDER BY CreatedDate DESC\n                                          LIMIT 1)\n                                          FROM Invoice_Statement__c\n                                          WHERE ID IN :rejectedStatements.keySet()])\n        {\n            processInstanceIds.add(invs.ProcessInstances[0].Id);\n        }\n\n        // Now that we have the most recent process instances, we can check\n        // the most recent process steps for comments.\n        for (ProcessInstance pi : [SELECT TargetObjectId,\n                                   (SELECT Id, StepStatus, Comments\n                                    FROM Steps\n                                    ORDER BY CreatedDate DESC\n                                    LIMIT 1 )\n                                   FROM ProcessInstance\n                                   WHERE Id IN :processInstanceIds\n                                   ORDER BY CreatedDate DESC])\n        {\n            if ((pi.Steps[0].Comments == null ||\n                    pi.Steps[0].Comments.trim().length() == 0))\n            {\n                rejectedStatements.get(pi.TargetObjectId).addError(\n                    'Operation Cancelled: Please provide a rejection reason!');\n            }\n        }\n    }\n}",
-			"settings":
-			{
-				"buffer_size": 2537,
+				"buffer_size": 8046,
 				"line_ending": "Windows"
 			}
 		}
@@ -285,30 +250,68 @@
 	},
 	"expanded_folders":
 	[
-		"/D/mmworkspace/SB_Cheng",
-		"/D/mmworkspace/SB_Cheng/config",
-		"/D/mmworkspace/SB_Cheng/src",
-		"/D/mmworkspace/SB_Cheng/src/classes",
-		"/D/mmworkspace/SB_Cheng/src/triggers"
 	],
 	"file_history":
 	[
+		"/d/young_cheng/young/KL-TEST-20171120/src/pages/AMEducationTraining.page",
+		"/d/young_cheng/young/KL-TEST-20171120/src/classes/AMEducationTrainingHandler.cls",
+		"/d/young_cheng/young/KL-TEST-20171120/src/classes/AMEducationTrainingExtensionTest.cls",
+		"/d/young_cheng/young/KL-TEST-20171120/src/classes/AMEducationTrainingExtension.cls",
+		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
+		"/D/mmworkspace/SB_Cheng/src/classes/ProcessRollBackTest.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/SynchronousOrganization.cls",
+		"/D/mmworkspace/SB_Cheng/src/pages/AMEducationTraining.page",
+		"/D/mmworkspace/SB_Cheng/src/classes/Utils.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/SapContentOfArgs.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/AMEducationTrainingHandlerTest.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/pages/AMEducationTraining.page",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/Utils.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/AMEducationTrainingExtension.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/AMEducationTrainingExtensionTest.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/SapApprovalEnumTest.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/SapApprovalEnum.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/pages/ApprovalHome.page",
+		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalHomeController.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingExtension.cls",
+		"/d/young_cheng/young/KL-TEST-20171117/src/classes/AMEducationTrainingHandler.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/SapApprovalEnum.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/pages/AMEducationTraining.page",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/ApprovalHomeController.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/AMEducationTrainingExtension.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/AMEducationTrainingHandler.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/triggers/ApprovalManage1Trigger.trigger",
+		"/D/mmworkspace/SB_Cheng/src/triggers/ApprovalManage1Trigger.trigger",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingHandler.cls",
+		"/C/Users/young_cheng/Desktop/new_event_way",
+		"/D/mmworkspace/SB_Cheng/src/pages/AMBusinessTravel.page",
+		"/D/mmworkspace/SB_Cheng/src/classes/YoungUtil.cls",
+		"/D/mmworkspace/SB_Cheng/src/pages/ApprovalHome.page",
+		"/D/mmworkspace/SB_Cheng/src/classes/EmailUtils.cls",
+		"/d/young_cheng/young/KL-TEST-20171114/src/classes/SynchronousOrganization.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMExpenseReimburseHandler.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalManualShareHandler.cls",
+		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/haoide/config/settings/toolingapi.sublime-settings",
+		"/C/ProgramData/Microsoft/Windows/Start Menu/Programs/Sublime Text 3.lnk",
+		"/D/mmworkspace/SB_Cheng/src/classes/EmailUtils .cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingExtensionTest.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingController.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingHandlerTest.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/TestUtil.cls",
+		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalNodeFieldController.cls",
+		"/D/mmworkspace/SB_Cheng/src/pages/ApprovalNodeField.page",
+		"/D/mmworkspace/SB_Cheng/src/pages/tabbedAccount1.page",
+		"/D/mmworkspace/SB_Cheng/src/pages/EducationTrainingVF.page",
+		"/D/mmworkspace/SB_Cheng/src/triggers/TestTrigger.trigger",
+		"/D/mmworkspace/SB_Cheng/src/pages/tabbedAccount.page",
+		"/D/mmworkspace/SB_Cheng/src/pages/tabbedAccount .page",
 		"/C/Users/young_cheng/Desktop/salesforceApexEmailExample",
 		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalPermissionHandler.cls",
 		"/D/mmworkspace/SB_Cheng/src/triggers/ProcessRollBackTest.trigger",
 		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/DocBlockr/README.md",
-		"/D/mmworkspace/SB_Cheng/src/classes/Utils.cls",
-		"/D/mmworkspace/SB_Cheng/src/triggers/TestTrigger.trigger",
 		"/D/mmworkspace/SB_Cheng/src/triggers/HelloWorldTrigger.trigger",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/toolingapi.sublime-settings",
 		"/D/mmworkspace/SB_Cheng/src/classes/AMAbnormalQualityHandler.cls-meta.xml",
-		"/D/mmworkspace/SB_Cheng/src/triggers/ApprovalManage1Trigger.trigger",
-		"/D/mmworkspace/SB_Cheng/src/classes/AMEducationTrainingController.cls",
-		"/D/mmworkspace/SB_Cheng/src/pages/EducationTrainingVF.page",
 		"/D/mmworkspace/SB_Cheng/src/pages/TimeLineTest.page",
 		"/D/mmworkspace/SB_Cheng/src/classes/AMStaffTransferExtension.cls",
-		"/D/mmworkspace/SB_Cheng/src/classes/ApprovalHomeController.cls",
-		"/D/mmworkspace/SB_Cheng/src/pages/ApprovalHome.page",
 		"/D/mmworkspace/SB_Cheng/src/classes/AMAbnormalQualityHandler.cls",
 		"/D/mmworkspace/SB_Cheng/src/classes/CustomAccountLookupController.cls",
 		"/D/mmworkspace/SB_Cheng/src/pages/CustomAccountLookup.page",
@@ -377,38 +380,7 @@
 		"/d/young_cheng/young/KL_CHENG-20171002/src/classes/SiteMyOrderExtension.cls",
 		"/d/young_cheng/young/KL_CHENG-20171017/src/classes/EducationTraining_Apm1_c.cls",
 		"/d/young_cheng/young/KL_CHENG-20171011/src/classes/MyHelloWorld.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AM123.cls",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/User/sfdc.huangxy.sublime-settings",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/classes/HLYSyncEntertaineCostTest.cls",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/pages/TestPage01.page",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/classes/AMVisitorHostsExtension.cls",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/pages/AMVisitorHosts.page",
-		"/d/young_cheng/young/KL_CHENG-20171017/src/pages/AMBusinessTravel.page",
-		"/d/young_cheng/young/KL_CHENG-20171005/src/classes/ApprovalHomeController.cls",
-		"/d/young_cheng/young/KL_CHENG-20171005/src/pages/ApprovalHome.page",
-		"/d/young_cheng/young/KL_CHENG-20171005/src/pages/AMBookDinner.page",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/classes/SampleClass.cls",
-		"/d/young_cheng/young/KL_CHENG-20171011/src/pages/AajaxToolTest20171006.page",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/haoide/config/settings/toolingapi.sublime-settings",
-		"/C/Users/young_cheng/AppData/Roaming/Sublime Text 3/Packages/SalesforceXyTools/config/sfdc.huangxy.sublime-settings",
-		"/d/young_cheng/young/KL_CHENG-20171005/src/pages/AnswersHome.page",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/SapApprovalEnum.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMLeave.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/ContactControllerTest.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMAdvanceChargeExtensionTest.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/Utils.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/UpdateBillHeaderInfoHandler.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/ApprovalSyncCheckHandler.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/ApprovalManualShareHandler.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMInternalmemoHandlerTest.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMVisitorHostsHandler.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/triggers/ApprovalManage1Trigger.trigger",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMBookDinner.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/ChangePasswordController.cls",
-		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AMAbnormalQualityHandler.cls",
-		"/d/young_cheng/young/KL_CHENG-20171002/src/pages/AMITServiceRequest.page",
-		"/d/young_cheng/young/KL_CHENG-20171002/src/classes/AMLeave.cls",
-		"/d/young_cheng/young/KL_CHENG-20171002/src/classes/ForgotPasswordController.cls"
+		"/d/young_cheng/young/KL_CHENG-20171003/src/classes/AM123.cls"
 	],
 	"find":
 	{
@@ -419,6 +391,7 @@
 		"height": 104.0,
 		"where_history":
 		[
+			"d:\\young_cheng\\young\\KL-TEST-20171114",
 			"D:\\mmworkspace\\SB_Cheng",
 			"D:\\mmworkspace\\SB_Cheng\\src\\classes",
 			""
@@ -429,6 +402,30 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getContactDepNameByEmpid",
+			"EndDateTime",
+			"RelationId",
+			"Start_Time__c",
+			"public static final String ",
+			"get",
+			"getNumber",
+			"此記錄不符合項目條件或任何已啟用批准流程的初始提交者",
+			"SEMICON_Taiwan_2017",
+			"canCreateBusinessTravel",
+			"不能创建",
+			"EducationTrainingLocation__c",
+			"__c}\">",
+			"                    </apex:pageblocksection>",
+			"                        </apex:inputfield>",
+			"有",
+			"SF有",
+			"SF現有",
+			"getuser",
+			"getUser",
+			"img",
+			"in trg",
+			"IN TRG",
+			"TRG",
 			"部門",
 			"adderror",
 			"你没有权限修改当前记录",
@@ -452,6 +449,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"SapApprovalEnum.",
+			""
 		],
 		"reverse": false,
 		"show_context": true,
@@ -462,93 +461,93 @@
 	"groups":
 	[
 		{
-			"selected": 13,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/classes/AMEducationTrainingExtension.cls",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3870,
+						"buffer_size": 1374,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1630,
-								1630
+								0,
+								72
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Java/Java.sublime-syntax",
-							"tab_size": 4,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 570.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/pages/AMEducationTraining.page",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13381,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								73,
-								93
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Visualforce.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/classes/AMEducationTrainingExtensionTest.cls",
+					"buffer": 1,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2745,
+						"buffer_size": 1989,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1148,
-								1148
+								1535,
+								1535
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
+							"syntax": "Packages/MavensMate/sublime/lang/Visualforce.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 570.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1858,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								867,
+								867
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -577,7 +576,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -603,361 +602,37 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 342.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "src/classes/AMEducationTrainingHandlerTest.cls",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 836,
+						"buffer_size": 8046,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								833,
-								833
+								810,
+								810
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/classes/ApprovalManualShareHandler.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6267,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4913,
-								4913
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 570.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/classes/AMEducationTrainingHandler.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5390,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								739,
-								739
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 171.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/classes/ProcessRollBackTest.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12014,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9800,
-								9800
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 3519.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4264,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4264,
-								4264
-							]
-						],
-						"settings":
-						{
-							"is_debug_log": true,
-							"syntax": "Packages/Java/Java.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 684.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/classes/AMExpenseReimburseHandler.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5415,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2329,
-								2329
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "src/triggers/ApprovalManage1Trigger.trigger",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2006,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1538,
-								1679
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/classes/Utils.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 55191,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								41008,
-								41008
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/pages/EducationTrainingVF.page",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13992,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2430,
-								2430
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Visualforce.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1026.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "src/classes/TestUtil.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 61155,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								38661,
-								38661
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MavensMate/sublime/lang/Apex.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 12654.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "src/classes/YoungUtil.cls",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4077,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								198,
-								198
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 16,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2537,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								91,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
 					"type": "text"
 				}
 			]
@@ -998,6 +673,10 @@
 	{
 		"height": 131.0
 	},
+	"output.diff_with_server":
+	{
+		"height": 126.0
+	},
 	"output.error":
 	{
 		"height": 126.0
@@ -1005,6 +684,10 @@
 	"output.find_results":
 	{
 		"height": 0.0
+	},
+	"output.log":
+	{
+		"height": 91.0
 	},
 	"pinned_build_system": "",
 	"project": "SB_Cheng.sublime-project",
@@ -1019,6 +702,54 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"amedhand",
+				"KL-TEST-20171117\\src\\classes\\AMEducationTrainingHandler.cls"
+			],
+			[
+				"travel",
+				"SB_Cheng\\src\\pages\\AMBusinessTravel.page"
+			],
+			[
+				"apphome",
+				"KL-TEST-20171114\\src\\pages\\ApprovalHome.page"
+			],
+			[
+				"home",
+				"SB_Cheng\\src\\pages\\ApprovalHome.page"
+			],
+			[
+				"sap",
+				"SB_Cheng\\src\\classes\\SapApprovalEnum.cls"
+			],
+			[
+				"ema",
+				"SB_Cheng\\src\\classes\\EmailUtils.cls"
+			],
+			[
+				"synchronousorganization",
+				"KL-TEST-20171114\\src\\classes\\SynchronousOrganization.cls"
+			],
+			[
+				"u",
+				"src\\classes\\Utils.cls"
+			],
+			[
+				"email",
+				"src\\classes\\EmailUtils .cls"
+			],
+			[
+				"amed",
+				"src\\pages\\AMEducationTraining.page"
+			],
+			[
+				"approvalnode",
+				"src\\classes\\ApprovalNodeFieldController.cls"
+			],
+			[
+				"approvalnodefield",
+				"src\\pages\\ApprovalNodeField.page"
+			],
 			[
 				"vf",
 				"src\\pages\\EducationTrainingVF.page"
@@ -1038,10 +769,6 @@
 			[
 				"uit",
 				"src\\classes\\Utils.cls"
-			],
-			[
-				"home",
-				"src\\pages\\ApprovalHome.page"
 			],
 			[
 				"amstafftransfer",
@@ -1072,10 +799,6 @@
 				"src\\classes\\Utils.cls"
 			],
 			[
-				"amed",
-				"src\\classes\\AMEducationTrainingHandler.cls"
-			],
-			[
 				"edu",
 				"src\\pages\\EducationTrainingVF.page"
 			],
@@ -1094,10 +817,6 @@
 			[
 				"handl",
 				"KL_CHENG-20171011\\src\\classes\\AMBookDinnerHandlerTest.cls"
-			],
-			[
-				"u",
-				"KL_CHENG-20171002\\src\\classes\\Utils.cls"
 			]
 		],
 		"width": 0.0
@@ -1128,7 +847,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 546.0,
+	"side_bar_width": 400.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

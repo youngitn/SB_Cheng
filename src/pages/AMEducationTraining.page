@@ -1,4 +1,4 @@
-<apex:page extensions="AMEducationTrainingExtension" standardcontroller="Approval_Managed1__c">
+<apex:page extensions="AMEducationTrainingExtension" standardcontroller="Approval_Managed1__c" doctype="html-5.0">
     <!-- 教育訓練申請單 -->
     <html>
         <head>
@@ -41,11 +41,33 @@
                 } 
             });
 
+        j$("select[id$='pl_EducationTrainingExamination']").change(
+
+            function() {
+                //alert(j$(this).val());
+                if (j$(this).val() == 'trainingTransfer') {
+                   alert('請填寫轉訓時間');
+                } 
+            });
+
+         j$("select[id$='pl_EducationTrainingInHouseLecturerHiring']").change(
+
+            function() {
+                //alert(j$(this).val());
+                if (j$(this).val() == 'Internal') {
+                   j$("input[id$='EducationTrainingExternalLecturerName']").attr('disabled','disabled');
+                }else if(j$(this).val() == 'External'){
+                    j$("input[id$='EducationTrainingExternalLecturerName']").removeAttr('disabled');
+                    alert('請填寫內訓外聘/外訓 講師名稱!');
+                } 
+            });
+        
+
         j$("input[id$='doSave']").click(
 
             function() {
                 //alert('123');
-                if (j$("select[id$='pl_EducationTrainingLocationSelect']").val() == 'Else' && j$("input[id$='EducationTrainingLocation']").val()=='') {
+                if (j$("select[id$='pl_EducationTrainingLocationSelect']").val() == '' && j$("input[id$='EducationTrainingLocation']").val()=='') {
                    alert('請填寫訓練地點欄位!');
                    return false;
                 } 
@@ -77,6 +99,10 @@
             <apex:pagemessages escape="true">
             </apex:pagemessages>
             <apex:form id="edform">
+                <apex:actionfunction action="{!getContactEmpidByName}" rerender="ApplicantEmpid" name="getContactEmpidByNameJSFunc">
+                    <apex:param name="name" value="">
+                    </apex:param>
+                </apex:actionfunction>
                 <!-- <apex:actionfunction action="{!deleteRow}" id="deleteRow" name="deleteRow" rerender="output1">
                     <apex:param assignto="{!rowID}" name="rowID" value="">
                     </apex:param>
@@ -85,8 +111,8 @@
                     <apex:param assignto="{!rowID}" name="rowID" value="">
                     </apex:param>
                 </apex:actionfunction> -->
-                <apex:pageblock >
-                    <apex:pageblockbuttons >
+                <apex:pageblock>
+                    <apex:pageblockbuttons>
                         <apex:commandbutton action="{!save}" id="doSave" value="保存">
                         </apex:commandbutton>
                         <apex:commandbutton action="{!Cancel}" value="取消">
@@ -102,6 +128,7 @@
                         <!-- 申请人 -->
                         <apex:outputfield value="{!am.Applicant__c}">
                         </apex:outputfield>
+                       
                         <!-- 申请部門 -->
                         <apex:outputfield value="{!am.Dept_Name__c}">
                         </apex:outputfield>
@@ -122,19 +149,31 @@
                     <apex:pageblocksection title="主要信息">
                         <!--apex:outputField value="{!am.Dept_Name__c}"></apex:outputField-->
                         <!-- 申請人 -->
-                        <apex:inputfield value="{!am.Applicant__c}">
+                        <apex:inputfield onchange="getContactEmpidByNameJSFunc(this.value)" value="{!am.Applicant__c}">
                         </apex:inputfield>
-                        <!-- 課程時間 -->
-                        <apex:inputfield value="{!am.EducationTrainingTime__c}">
-                        </apex:inputfield>
+                         <apex:outputpanel  id="ApplicantEmpid" >
+                         員工編號:
+                            <input type="text"  label="員工編號" value="{!ApplicantEmpid}"></input >
+                        </apex:outputpanel>
                         <!-- 課程名稱 -->
                         <apex:inputfield value="{!am.EducationTrainingName__c}">
+                        </apex:inputfield>
+                        <!-- 教育訓練類別* -->
+                        <apex:inputfield id="pl_EducationTrainingType" value="{!am.EducationTrainingType__c}">
+                        </apex:inputfield>
+                        <!-- 九 課程類別(單選) -->
+                        <apex:inputfield id="pl_EducationTrainingCourseCategory" value="{!am.EducationTrainingCourseCategory__c}">
+                        </apex:inputfield>
+                        <!-- 課程時間 -->
+                        <apex:inputfield label="課程開始時間" value="{!am.Start_Time__c}">
+                        </apex:inputfield>
+                        <apex:inputfield label="課程結束時間" value="{!am.End_Time__c}">
                         </apex:inputfield>
                         <!-- 課程時數 -->
                         <apex:inputfield value="{!am.EducationTrainingHours__c}">
                         </apex:inputfield>
-                        <!-- 教育訓練類別* -->
-                        <apex:inputfield id="pl_EducationTrainingType" value="{!am.EducationTrainingType__c}">
+                        <!-- 課程天數 -->
+                        <apex:inputfield label="課程天數" value="{!am.Days__c}">
                         </apex:inputfield>
                         <!-- 訓練目的/目標 -->
                         <apex:inputfield value="{!am.EducationTrainingPurpose__c}">
@@ -142,11 +181,11 @@
                         <!-- 八計劃類別(單選) -->
                         <apex:inputfield id="pl_EducationTrainingPlanType" value="{!am.EducationTrainingPlanType__c}">
                         </apex:inputfield>
-                        <!-- 九 課程類別(單選) -->
-                        <apex:inputfield id="pl_EducationTrainingCourseCategory" value="{!am.EducationTrainingCourseCategory__c}">
-                        </apex:inputfield>
                         <!-- 十五、訓練評估(單選題) -->
                         <apex:inputfield id="pl_EducationTrainingExamination" value="{!am.EducationTrainingExamination__c}">
+                        </apex:inputfield>
+                        <!-- 十四、外聘(訓)講師姓名(填空題) -->
+                        <apex:inputfield label="內訓外聘/外訓 講師名稱" id="EducationTrainingExternalLecturerName" value="{!am.EducationTrainingExternalLecturerName__c}">
                         </apex:inputfield>
                     </apex:pageblocksection>
                     <apex:pageblocksection id="InternalTraining" title="內訓資訊">
@@ -157,7 +196,7 @@
                         <apex:inputfield id="EducationTrainingDepartment" value="{!am.EducationTrainingDepartment__c}">
                         </apex:inputfield>
                         <!-- 11 訓練地點 -->
-                        <apex:inputfield id="pl_EducationTrainingLocationSelect" value="{!am.EducationTrainingLocationSelect__c}">
+                        <apex:inputfield id="pl_EducationTrainingLocationSelect" value="{!am.Meeting_Rooms__c}">
                         </apex:inputfield>
                         <apex:inputfield id="EducationTrainingLocation" value="{!am.EducationTrainingLocation__c}">
                         </apex:inputfield>
@@ -185,6 +224,9 @@
                                     </th>
                                     <th>
                                         姓名
+                                    </th>
+                                    <th>
+                                        部門
                                     </th>
                                 </thead>
                                 <tbody>
@@ -221,6 +263,9 @@
                                             <td>
                                                 <input id="participant_{!listIndex}" onchange="putValueInJavascript(this.value,{!listIndex},'name')" readonly="readonly" style="width: 90%;" styleclass="text" type="text" value="{!item.name}"/>
                                             </td>
+                                            <td>
+                                                <input id="participant_{!listIndex}" onchange="putValueInJavascript(this.value,{!listIndex},'name')" readonly="readonly" style="width: 90%;" styleclass="text" type="text" value="{!item.dep}"/>
+                                            </td>
                                         </tr>
                                         <apex:variable value="{!listIndex+1}" var="listIndex">
                                         </apex:variable>
@@ -231,9 +276,6 @@
                     </apex:pageblocksection>
                     <!-- 如果教育訓練類別 = 內訓 顯示參訓人員 -->
                     <apex:pageblocksection id="ExternalTraining" title="外訓資訊">
-                        <!-- 十四、外聘(訓)講師姓名(填空題) -->
-                        <apex:inputfield value="{!am.EducationTrainingExternalLecturerName__c}">
-                        </apex:inputfield>
                         <apex:inputfield value="{!am.ExternalEducationTrainingOrganizers__c}">
                         </apex:inputfield>
                         <apex:inputfield value="{!am.ExternalEducationTrainingContactPerson__c}">
@@ -244,8 +286,10 @@
                         </apex:inputfield>
                         <apex:inputfield value="{!am.ExternalEducationTrainingFee__c}">
                         </apex:inputfield>
+
                     </apex:pageblocksection>
                 </apex:pageblock>
+
             </apex:form>
         </body>
     </html>

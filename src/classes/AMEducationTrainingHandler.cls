@@ -25,9 +25,10 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
         Id rtId = HarryUtils.getRecordTypeIdByDevNameAndObjName(SapApprovalEnum.EDUCATIONTRAININGREQUEST, 'Approval_Managed1__c');
         System.debug('!!!!!get rtid =' + rtId);
         System.debug('Trigger.isBefore && Trigger.isInsert=' + Trigger.isBefore + '&&' + Trigger.isInsert);
-
+        
         if (Trigger.isBefore && Trigger.isInsert)
         {
+            Set<String> userIds = new Set<String>();
             for (Approval_Managed1__c cam : (List<Approval_Managed1__c>)Trigger.new)
             {
                 if (cam.RecordTypeId == rtId)
@@ -42,19 +43,24 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
                 }
                 if (!String.isBlank(cam.InternalEducationParticipants__c))
                 {
-                    Set<String> userIds = new Set<String>();
+
                     List<String> pList = cam.InternalEducationParticipants__c.split(',');
                     for(String p : pList)
                     {
                         List<User> i = [SELECT Id FROM User WHERE Number__c = : p.substringAfter('-')];
                         userIds.add(i.get(0).Id);
                     }
-                    if(userIds.size() > 0)
-                    {
-                        Utils.ManualShareRecordToUsers(userIds, 'Approval_Managed1__c', String.valueOf(cam.get('Id')));
-                    }
-                }
 
+                }
+                //申請人讀取權限
+                userIds.add( Utils.getUserIdByContactID(cam.Applicant__c));
+                //申請人讀取權限
+                userIds.add( Utils.getUserIdByContactID(cam.Applicant__c));
+
+                if(userIds.size() > 0)
+                {
+                    Utils.ManualShareRecordToUsers(userIds, 'Approval_Managed1__c', String.valueOf(cam.get('Id')));
+                }
             }
         }
         if (Trigger.isBefore && Trigger.isUpdate)
@@ -63,9 +69,12 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
 
             for (Approval_Managed1__c cam : (List<Approval_Managed1__c>)Trigger.new)
             {
-                
-                System.debug('##################cam.Approval_Status__c=' + cam.Approval_Status__c);
-               
+
+                // //CREAT EVENT
+                // if (cam.Approval_Status__c == 'A')
+                // {
+                //     System.debug('SUCCESS');
+                // }
 
                 if (cam.RecordTypeId == rtId && cam.Is_Reset_Approvaler__c)
                 {
@@ -76,9 +85,9 @@ public without sharing class AMEducationTrainingHandler implements Triggers.Hand
                     setApprovalUser(mapSpecify, cam);
                     cam.Is_Reset_Approvaler__c = false;
                 }
-                
+
             }
-            
+
         }
     }
     public void setApprovalUser(Map<Decimal, Organizational__c> mapSpecify, Approval_Managed1__c cam)

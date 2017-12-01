@@ -28,18 +28,16 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
         Map<Id, Approval_Managed1__c> rejectedStatements = new Map<Id, Approval_Managed1__c> {};
         //<-------reject-------
         //获取教育訓練申請流程各节点配置
-        System.debug('!!!!!inAMEducationTrainingHandler');
+        
         Map<Decimal, Organizational__c>  mapSpecify = null;
         Id rtId = HarryUtils.getRecordTypeIdByDevNameAndObjName(SapApprovalEnum.EDUCATIONTRAININGREQUEST, 'Approval_Managed1__c');
-        System.debug('!!!!!get rtid =' + rtId);
-        System.debug('Trigger.isBefore && Trigger.isInsert=' + Trigger.isBefore + '&&' + Trigger.isInsert);
+       
 
 
 
         if (Trigger.isBefore)
         {
-            System.debug('In Trigger.isBefore');
-
+          
 
             for (Approval_Managed1__c cam : (List<Approval_Managed1__c>)Trigger.new)
             {
@@ -64,10 +62,7 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
             {
                 if (cam.RecordTypeId == rtId)
                 {
-                    System.debug('##################insert cam.Approval_Status__c=' + cam.Approval_Status__c);
-
-
-                    System.debug('!!!!!in cam.RecordTypeId == rtId');
+                  
                     if (mapSpecify == null)
                     {
                         //這裡的step來源是[流程配置] 不是Approval Processes
@@ -79,9 +74,7 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
                 {
                     Set<String> userIds = new Set<String>();
                     List<String> pList = cam.InternalEducationParticipants__c.split(',');
-                    System.debug('pList---------->' + pList);
-                    System.debug('pList0---------->' + pList[0]);
-                    System.debug('pList1---------->' + pList[1]);
+                   
                     for(String p : pList)
                     {
                         //如果沒有SF ID 在進行以下select時 i 會是空的
@@ -113,34 +106,80 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
 
         if (Trigger.isBefore && Trigger.isUpdate)
         {
-            System.debug('##################');
+           
 
             for (Approval_Managed1__c cam : (List<Approval_Managed1__c>)Trigger.new)
             {
                 //-------reject------->
                 //Approval_Managed1__c oldInv = System.Trigger.oldMap.get(cam.Id);
                 //System.debug('##################oldInv.Approval_Status__c=' + oldInv.Approval_Status__c);
-                System.debug('##################update cam.Approval_Status__c=' + cam.Approval_Status__c);
+                // 這裡已經是取得'本關卡'的必填(目前用可編輯欄位模擬)欄位了
                 List<Organizational__c> org = getCurrNodeEditableField(SapApprovalEnum.EDUCATIONTRAININGREQUEST, cam.CurrentProcess__c);
-                System.debug('*********************************>' + org.get(0).Node_Edit_Fields__c);
-                String[] s = org.get(0).Node_Edit_Fields__c.split(',');
-                for (String ss : s )
+                //如果有必填欄位 目前是抓可編輯欄位
+                if (org.size() > 0)
                 {
-                    // dynamic DML
-                    Object fldObj = cam.get(ss);
-
-                    //必填欄位等於AP02則拋錯誤訊息
-                    if(fldObj.equals('AP02'))
+                    
+                    String[] s = org.get(0).Node_Edit_Fields__c.split(',');
+                    String errorMessage = '';
+                    //必填欄位(目前用可編輯欄位模擬)抓取與判斷完成
+                    for (String ss : s )
                     {
-                                                    
-                    	cam.addError('ERROR');
+                        // dynamic DML
+                        // 取欄位標籤用
+                        Map<String, Schema.SObjectField> myFields = Schema.getGlobalDescribe().get( 'Approval_Managed1__c' ).getDescribe().fields.getMap();
+
+                        object o = cam.get(ss);
+                        //如果必填欄位(目前用可編輯欄位模擬)是空值 就在這裡判斷
+                        //是空的話加入errorMessage
+                        //目前這邊將AP02字串 當空值 如果必填欄位(目前用可編輯欄位模擬)中value有AP02的就加入錯誤訊息
+                        //同時取得該欄位label做為訊息顯示
+                        if(o == null || o.equals('') || o.equals('AP01'))
+                        {
+
+                            errorMessage += '<li style=\'background-color:red;color:white;font-size:150%\'>' + myFields.get(ss).getDescribe().getLabel() + '</li>';
+                            // cam.addError(
+                            // '<script>document.getElementById("bodyCell").innerHTML="<cnter><ul><li>請輸入拒絕理由!</li></ul><br/><a onclick=\'history.back()\'>回上頁</a></center>";</script>', false);
+
+                        }
+
+
 
                     }
-                    
+                    //必填未填即拋出訊息
+                    if (!errorMessage.trim().equals(''))
+                    {
+                        cam.addError(
+                            '<script>document.getElementById("bodyCell").innerHTML="以下必填欄位(目前用可編輯欄位模擬)不可空白:<ul>' + errorMessage + '</ul><br/><a onclick=\'history.back()\'>回上頁</a>"</script>', false);
+                    }
+
 
                 }
 
+                if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.Approval_Status__c == 'A')
+                {
+                    System.debug('SUCCESS');
+                    /*********************** 當審批完成再創建事件會有會議室booking的時效問題************************/
+                    //建立一event type=日循環
+                    // Event e = new Event(RecurrenceType = 'RecursDaily'); //如果API文件上面類型是屬性 則要在建構式給它
+                    // e.Subject = cam.EducationTrainingName__c+'_核准後';
+                    // datetime startTime = cam.Start_Time__c;//只抓時間
+                    // e.OwnerId = Utils.getUserIdByContactID(cam.Applicant__c);
+                    // e.ActivityDateTime = startTime;//只抓時間
+                    // e.StartDateTime = startTime;//只抓時間
+                    // e.EndDateTime = cam.End_Time__c;//只抓時間
 
+                    // //e.WhoId = am.Applicant__c;//非必要
+                    // e.WhatId = cam.Id;//關聯單Id
+                    // e.IsAllDayEvent = false; //是否全天
+                    // e.IsRecurrence = true; //循環
+                    // e.RecurrenceStartDateTime = startTime; //循環開始時間 同開始時間
+
+                    // //天數要減1 addDays(1) 會變成兩天
+                    // e.RecurrenceEndDateOnly = startTime.adddays(Integer.valueOf(cam.Days__c) - 1).date(); //循環結束日期
+                    // e.RecurrenceInterval = 1; //循環頻率
+
+                    // insert e;
+                }
 
                 if (/*oldInv.Approval_Status__c != 'Rejected' && */cam.Approval_Status__c == 'R')
                 {
@@ -238,10 +277,10 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
                         // rejectedStatements.get(pi.TargetObjectId).addError(
                         //     '<script>document.getElementById("errorDesc").remove();alert("請輸入拒絕理由!");</script>',false);
                         //way 2
-                        // rejectedStatements.get(pi.TargetObjectId).addError(
-                        //     '<script>document.getElementById("bodyCell").innerHTML="<cnter><H1 >請輸入拒絕理由!</H1><br/><a>回上頁</a></center>";</script>',false);
                         rejectedStatements.get(pi.TargetObjectId).addError(
-                            '請輸入拒絕理由', false);
+                            '<script>document.getElementById("bodyCell").innerHTML="<cnter><H1 >請輸入拒絕理由!</H1><br/><a>回上頁</a></center>";</script>', false);
+                        // rejectedStatements.get(pi.TargetObjectId).addError(
+                        //     '請輸入拒絕理由', false);
                     }
                 }
             }
@@ -250,11 +289,10 @@ public without sharing class ProcessRollBackTest implements Triggers.Handler
     }
 
     /**
-     * [getCurrNodeEditableField description]
-     * 取得
-     * @param  formName            [description]
-     * @param  targetFieldNameType [description]
-     * @return                     [description]
+     * [getCurrNodeEditableField 取的目前關卡的可編輯欄位名稱]
+     * @param  formName            [SapApprovalEnum.流程名稱]
+     * @param  NowNode			   [目前流程關卡欄位]
+     * @return List<Organizational__c> [description]
      */
     public List<Organizational__c> getCurrNodeEditableField(String formName , String NowNode )
     {

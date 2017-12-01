@@ -24,7 +24,7 @@ private class AMEducationTrainingExtensionTest
         Approval_Managed1__c am = new Approval_Managed1__c();
         am.Applicant__c = con.Id;
         am.RecordTypeId = rc.Id;
-        am.EducationTrainingTime__c = Datetime.now();
+        am.Start_Time__c = Datetime.now();
         am.EducationTrainingHours__c = '8';
         AMEducationTrainingExtension.Participant px = new AMEducationTrainingExtension.Participant();
         AMEducationTrainingExtension extension = new AMEducationTrainingExtension(new ApexPages.StandardController(am));

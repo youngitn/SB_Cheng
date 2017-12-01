@@ -437,7 +437,7 @@ public with sharing class SynchronousOrganization {
 						EmailEncodingKey, FederationIdentifier,TimeZoneSidKey,Extension,CompanyName,
 						Alias,LocaleSidKey,LanguageLocaleKey,Is_First_Manager__c,Is_Manager__c 
 				FROM User 
-				WHERE Is_System_Account__c = false];
+				WHERE Is_System_Account__c = false and Profile.UserLicense.Name <> 'chatter External' and Profile.UserLicense.Name <> 'chatter Free'];
 
 		Map<String,User> mapUsr = new Map<String,User>();
 		Set<String>  setUsrName= new Set<String>();

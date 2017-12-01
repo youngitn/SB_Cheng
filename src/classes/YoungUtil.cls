@@ -11,17 +11,17 @@ public with sharing class YoungUtil
         // If there are some approvals to be reviewed for approval, then
         // get the most recent process instance for each object.
         List<Id> processInstanceIds = new List<Id> {};
-         
 
-         List<Object> a =[SELECT (SELECT ID FROM ProcessInstances
-                                          ORDER BY CreatedDate DESC
-                                          LIMIT 1)
-                                          FROM Approval_Managed1__c
-                                          WHERE ID IN :rejectedStatements.keySet()];
+
+        List<Object> a = [SELECT (SELECT ID FROM ProcessInstances
+                                  ORDER BY CreatedDate DESC
+                                  LIMIT 1)
+                          FROM Approval_Managed1__c
+                          WHERE ID IN :rejectedStatements.keySet()];
 
         for (Object invs : a)
         {
-            
+
             processInstanceIds.add(((Approval_Managed1__c)invs).ProcessInstances[0].Id);
         }
 
@@ -44,7 +44,8 @@ public with sharing class YoungUtil
         }
     }
 
-    public static void aaa(){
+    public static void aaa()
+    {
 
     }
     /**
@@ -61,7 +62,7 @@ public with sharing class YoungUtil
         if(type.equals('Approval_Managed1__c'))
         {
             ((Approval_Managed1__c)o).addError(message);
-   
+
         }
         else
         {
@@ -102,5 +103,48 @@ public with sharing class YoungUtil
         return 'Object';                    // actually we can't detect maps and sets and maps
     }
 
+    public static string createEvent()
+    {
+        Contact c = [Select id, SF_User__r.id from Contact where name = '陳 麗娟'].get(0);
+        Contact c1 = [Select id, SF_User__r.id from Contact where name = '梁 惠雯'].get(0);
+        Contact c2 = [Select id, SF_User__r.id from Contact where name = '高 慧珠'].get(0);
+
+        //邀關聯的表單ID
+        Approval_Managed1__c am = [Select id from Approval_Managed1__c where id = 'a07N000000IdYdi'].get(0);
+        Event e = new Event();
+        e.Subject = '6666';
+        datetime a = datetime.now();
+        e.OwnerId = c.SF_User__r.id;
+        e.ActivityDateTime = a;
+        e.StartDateTime = a;
+        e.EndDateTime = a.adddays(5);
+        e.WhoId = c.Id;
+        e.WhatId = am.Id;
+
+        insert e;
+
+        EventRelation er = new EventRelation();
+        System.debug(e.Id);
+        er.EventId = e.Id;
+        er.RelationId =  c1.SF_User__r.id;//用SF_User__r.id作為邀請人才是真邀請
+        insert er;
+
+        EventRelation er1 = new EventRelation();
+        er1.EventId = e.Id;
+        er1.RelationId = c2.SF_User__r.id;//用SF_User__r.id作為邀請人才是真邀請
+        insert er1;
+
+        EventRelation er2 = new EventRelation();
+        er2.EventId = e.Id;
+        er2.RelationId = '02328000003LL4r';
+        er2.Status = 'Accepted';//設為邀請人已接受 因為是資源 所以必須設為接受
+        insert er2;
+
+        update e;
+
+
+
+        return 'success';
+    }
 
 }
